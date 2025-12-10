@@ -249,6 +249,754 @@
             grid-area: words;
         }
 
+        .stat-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 5px;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+        }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #2ECC71;
+        }
+
+        .stat-item:nth-child(1) .stat-value {
+            color: #F1C40F;
+            font-size: 2.2rem;
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.6);
+            text-transform: uppercase;
+        }
+
+        /* NEW: Home Screen Header */
+        #home-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            padding: 20px 0;
+            /* MODIFIED: Default Green Gradient */
+            background: linear-gradient(180deg, rgba(46, 204, 113, 0.8) 0%, rgba(39, 174, 96, 0.4) 60%, rgba(0, 0, 0, 0) 100%);
+            z-index: 1;
+            pointer-events: none;
+            display: block;
+            /* MODIFIED: Show by default */
+        }
+
+        #home-header h1 {
+            margin: 0;
+            padding-top: 20px;
+            font-size: 4rem;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+            /* MODIFIED: Add gradient to text - Default Green */
+            background: linear-gradient(45deg, #58D68D, #2ECC71);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            transition: background 0.5s ease;
+        }
+
+        /* Top Navigation Menu */
+        .top-menu {
+            position: absolute;
+            top: 120px;
+            /* MODIFIED: Adjusted for header */
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            z-index: 10;
+            background-color: rgba(40, 40, 40, 0.7);
+            padding: 5px 20px;
+            border-radius: 30px;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            /* For Safari */
+            transition: opacity 1.2s ease, top 0.5s ease;
+        }
+
+        .menu-item {
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            padding: 10px 0;
+            position: relative;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            opacity: 1;
+        }
+
+        .menu-item.active {
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        .menu-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: white;
+        }
+
+        .credit-display {
+            color: #ffd700;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-left: 10px;
+            padding: 5px 15px;
+            /* MODIFIED: Adjusted padding */
+            background-color: rgba(0, 0, 0, 0.3);
+            border-radius: 20px;
+            /* MODIFIED: Add flex for icon alignment */
+            display: flex;
+            align-items: center;
+        }
+
+        /* Language Dropdown */
+        .language-selector {
+            position: relative;
+            margin-left: 10px;
+        }
+
+        #current-language-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 10px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        #current-language-btn:hover {
+            opacity: 1;
+        }
+
+        #language-options {
+            position: absolute;
+            top: 110%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(40, 40, 40, 0.9);
+            border-radius: 10px;
+            overflow: hidden;
+            display: none;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            min-width: 120px;
+        }
+
+        #language-options.visible {
+            display: block;
+        }
+
+        #language-options a {
+            display: block;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: background-color 0.2s;
+        }
+
+        #language-options a:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Page Views for Shop, Settings, etc. */
+        .page-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            padding-top: 120px;
+            /* Pushed down to avoid menu overlap */
+            justify-content: center;
+            z-index: 5;
+            pointer-events: none;
+            /* Pass clicks through unless content is visible */
+            box-sizing: border-box;
+        }
+
+        .content-bar {
+            background-color: rgba(20, 20, 20, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            width: 90%;
+            max-width: 400px;
+            height: 70vh;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            pointer-events: auto;
+            /* Enable clicks on the content bar */
+            overflow-y: auto;
+            /* Enables scrolling */
+        }
+
+        .content-bar h2 {
+            margin-top: 0;
+            font-size: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            padding-bottom: 10px;
+        }
+
+        #shop-view .content-bar {
+            max-width: 1000px;
+            /* Wider container for the shop gallery */
+        }
+
+        .theme-gallery {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        @media (max-width: 1000px) {
+            .theme-gallery {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .theme-gallery {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .theme-item {
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .theme-item h3 {
+            margin-top: 0;
+        }
+
+        .theme-demo-canvas {
+            width: 150px;
+            height: 150px;
+            margin: 10px auto;
+            border-radius: 15px;
+        }
+
+        .theme-cost {
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-top: 10px;
+            margin-bottom: 5px;
+        }
+
+        .theme-button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .theme-button {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-family: 'PixelFont';
+        }
+
+        .action-button {
+            background-color: #007bff;
+        }
+
+        .action-button:hover {
+            background-color: #0056b3;
+        }
+
+        .action-button.equipped {
+            background-color: #28a745;
+            cursor: not-allowed;
+        }
+
+        .action-button.disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+
+        .demo-button {
+            background-color: #6c757d;
+        }
+
+        .demo-button:hover {
+            background-color: #5a6268;
+        }
+
+        #exit-demo-button {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 21;
+            background-color: #dc3545;
+            --animate-duration: 0.5s;
+            width: auto;
+            padding: 10px 20px;
+            font-size: 1rem;
+        }
+
+        #exit-demo-button:hover {
+            background-color: #c82333;
+        }
+
+        /* Styles for sections in settings */
+        .settings-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        #settings-view .settings-section:first-of-type {
+            border-top: none;
+            padding-top: 0;
+            margin-top: 20px;
+        }
+
+        .settings-section h3 {
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        .settings-section p {
+            opacity: 0.8;
+            font-size: 1rem;
+            line-height: 1.5;
+            font-family: inherit;
+        }
+
+        /* Overrides for language selector in settings */
+        #settings-view .language-selector {
+            position: relative;
+            margin-left: 0;
+            margin-top: 15px;
+        }
+
+        #settings-view #current-language-btn {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: left;
+            font-size: 1.1rem;
+            font-family: inherit;
+        }
+
+        #settings-view #current-language-btn::after {
+            content: '▼';
+            float: right;
+        }
+
+        #settings-view #language-options {
+            top: 105%;
+            left: 0;
+            transform: none;
+            width: 100%;
+            z-index: 5;
+        }
+
+        /* Sign Out Button Style */
+        #sign-out-btn {
+            background-color: #dc3545;
+            margin-top: 15px;
+            font-family: 'PixelFont';
+        }
+
+        #sign-out-btn:hover {
+            background-color: #c82333;
+        }
+
+
+        /* Duolingo-style Quiz CSS */
+        .quiz-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-header {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto 20px auto;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 10px 15px;
+            border-radius: 12px;
+            box-sizing: border-box;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .quiz-header .progress-bar {
+            flex-grow: 1;
+        }
+
+        .leave-button {
+            background-color: #dc3545;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 8px 15px;
+            border: none;
+            border-bottom: 3px solid #a71d2a;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+            font-family: inherit;
+        }
+
+        .leave-button:hover {
+            background-color: #c82333;
+            transform: translateY(-1px);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 15px;
+            background-color: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .progress-bar-inner {
+            height: 100%;
+            background-color: #58a700;
+            border-radius: 10px;
+            transition: width 0.3s ease-in-out;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .strikes-container {
+            display: flex;
+            gap: 5px;
+        }
+
+        .strike {
+            font-size: 1.5rem;
+            color: #ff4b4b;
+            text-shadow: 0 0 5px #ff0000;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        .strike.lost {
+            color: rgba(255, 255, 255, 0.3);
+            text-shadow: none;
+        }
+
+        .quiz-warning-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+            /* On top of everything */
+            backdrop-filter: blur(5px);
+        }
+
+        .quiz-warning-modal {
+            background-color: #282828;
+            padding: 30px;
+            border-radius: 15px;
+            color: white;
+            text-align: center;
+            width: 90%;
+            max-width: 400px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .quiz-warning-modal h3 {
+            margin-top: 0;
+            font-size: 1.5rem;
+        }
+
+        .quiz-warning-modal p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            opacity: 0.8;
+            line-height: 1.5;
+            font-family: inherit;
+        }
+
+        .quiz-warning-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .quiz-warning-actions button {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 4px solid transparent;
+            font-family: inherit;
+        }
+
+        .quiz-warning-actions button:hover {
+            transform: translateY(-2px);
+        }
+
+        .confirm-leave-btn {
+            background-color: #dc3545;
+            border-bottom-color: #a71d2a;
+        }
+
+        .cancel-leave-btn {
+            background-color: #6c757d;
+            border-bottom-color: #494f54;
+        }
+
+
+        .quiz-main {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .quiz-body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            width: 100%;
+        }
+
+        .character-container {
+            flex-shrink: 0;
+        }
+
+        .quiz-question {
+            font-size: 2rem;
+            font-weight: bold;
+            text-align: left;
+            flex: 1;
+            font-family: inherit;
+        }
+
+        .learning-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            color: #333;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            width: 100%;
+        }
+
+        .learning-card .number {
+            font-size: 3rem;
+            font-weight: bold;
+        }
+
+        .learning-card .word {
+            font-size: 2rem;
+        }
+
+        .quiz-feedback-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .quiz-feedback-box {
+            font-size: 1.2rem;
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            min-height: 50px;
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .mic-button {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mic-button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .mic-button.recording {
+            background-color: #dc3545;
+            border-color: #a71d2a;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 10px rgba(220, 53, 69, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+            }
+        }
+
+        .answer-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            width: 100%;
+            max-width: 500px;
+            margin-top: 20px;
+        }
+
+        .answer-option {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+
+        .answer-option:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .answer-option.selected {
+            background-color: #4a90e2;
+            border-color: #357abd;
+        }
+
+        .answer-option.correct {
+            background-color: #58a700;
+            border-color: #4a8c00;
+        }
+
+        .answer-option.incorrect {
+            background-color: #dc3545;
+            border-color: #a71d2a;
+        }
+
+
+        .quiz-footer {
+            width: 100%;
+            padding: 20px 0;
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .quiz-actions {
+            max-width: 800px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .check-button {
+            flex: 2;
+            background-color: #58a700;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            padding: 15px;
+            border: none;
+            border-bottom: 5px solid #4a8c00;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+            font-family: inherit;
+        }
+
+        .check-button:hover:not(:disabled) {
+            transform: translateY(-2px);
+        }
+
+        .check-button:disabled {
+            background-color: #777;
+            border-bottom-color: #555;
+            cursor: not-allowed;
+        }
+
+        .try-again-button {
+            flex: 1;
+            background-color: #6c757d;
+            border-bottom-color: #555;
+        }
+
         .result-banner {
             position: fixed;
             top: 50%;
@@ -675,6 +1423,2192 @@
                                 data-cost="500">Buy</button>
                         </div>
                     </div>
+                    <div class="theme-item">
+                        <h3>Orange Oasis</h3>
+                        <p>A warm, citrus-hued theme for a friendly and inviting universe.</p>
+                        <div id="demo-orange" class="theme-demo-canvas"></div>
+                        <p class="theme-cost"></p>
+                        <div class="theme-button-group">
+                            <button class="theme-button demo-button" data-theme="orangeOasis">Demo</button>
+                            <button class="theme-button action-button" data-theme="orangeOasis"
+                                data-cost="500">Buy</button>
+                        </div>
+                    </div>
+                    <div class="theme-item">
+                        <h3>Golden Galaxy</h3>
+                        <p>Explore a cosmos of gold, amber, and lemon for a rich experience.</p>
+                        <div id="demo-yellow" class="theme-demo-canvas"></div>
+                        <p class="theme-cost"></p>
+                        <div class="theme-button-group">
+                            <button class="theme-button demo-button" data-theme="goldenGalaxy">Demo</button>
+                            <button class="theme-button action-button" data-theme="goldenGalaxy"
+                                data-cost="500">Buy</button>
+                        </div>
+                    </div>
+                    <div class="theme-item">
+                        <h3>Emerald Expanse</h3>
+                        <p>A lush theme of green, from deep forest to bright lime.</p>
+                        <div id="demo-green" class="theme-demo-canvas"></div>
+                        <p class="theme-cost"></p>
+                        <div class="theme-button-group">
+                            <button class="theme-button demo-button" data-theme="emeraldExpanse">Demo</button>
+                            <button class="theme-button action-button" data-theme="emeraldExpanse"
+                                data-cost="500">Buy</button>
+                        </div>
+                    </div>
+                    <div class="theme-item">
+                        <h3>Sapphire Sphere</h3>
+                        <p>Dive into a deep space of blues, from sky to navy.</p>
+                        <div id="demo-blue" class="theme-demo-canvas"></div>
+                        <p class="theme-cost"></p>
+                        <div class="theme-button-group">
+                            <button class="theme-button demo-button" data-theme="sapphireSphere">Demo</button>
+                            <button class="theme-button action-button" data-theme="sapphireSphere"
+                                data-cost="500">Buy</button>
+                        </div>
+                    </div>
+                    <div class="theme-item">
+                        <h3>Violet Vortex</h3>
+                        <p>A mysterious and regal theme of purple, lavender, and indigo.</p>
+                        <div id="demo-violet" class="theme-demo-canvas"></div>
+                        <p class="theme-cost"></p>
+                        <div class="theme-button-group">
+                            <button class="theme-button demo-button" data-theme="violetVortex">Demo</button>
+                            <button class="theme-button action-button" data-theme="violetVortex"
+                                data-cost="500">Buy</button>
+                        </div>
+                    </div>
+                    <div class="theme-item">
+                        <h3>Starlight Noir</h3>
+                        <p>A sleek, minimalist theme with black planets and white outlines.</p>
+                        <div id="demo-noir" class="theme-demo-canvas"></div>
+                        <p class="theme-cost"></p>
+                        <div class="theme-button-group">
+                            <button class="theme-button demo-button" data-theme="starlightNoir">Demo</button>
+                            <button class="theme-button action-button" data-theme="starlightNoir"
+                                data-cost="750">Buy</button>
+                        </div>
+                    </div>
+                    <div class="theme-item">
+                        <h3>Nebula Burst</h3>
+                        <p>Vibrant, swirling gas clouds make up every celestial body.</p>
+                        <div id="demo-nebula" class="theme-demo-canvas"></div>
+                        <p class="theme-cost"></p>
+                        <div class="theme-button-group">
+                            <button class="theme-button demo-button" data-theme="nebulaBurst">Demo</button>
+                            <button class="theme-button action-button" data-theme="nebulaBurst"
+                                data-cost="750">Buy</button>
+                        </div>
+                    </div>
+                    <div class="theme-item">
+                        <h3>Blueprint Grid</h3>
+                        <p>A holographic, technical look with glowing wireframe grids.</p>
+                        <div id="demo-blueprint" class="theme-demo-canvas"></div>
+                        <p class="theme-cost"></p>
+                        <div class="theme-button-group">
+                            <button class="theme-button demo-button" data-theme="blueprintGrid">Demo</button>
+                            <button class="theme-button action-button" data-theme="blueprintGrid"
+                                data-cost="750">Buy</button>
+                        </div>
+                    </div>
+                    <div class="theme-item">
+                        <h3>Molten Core</h3>
+                        <p>Dark, cracked rock with glowing lava peeking from within.</p>
+                        <div id="demo-molten" class="theme-demo-canvas"></div>
+                        <p class="theme-cost"></p>
+                        <div class="theme-button-group">
+                            <button class="theme-button demo-button" data-theme="moltenCore">Demo</button>
+                            <button class="theme-button action-button" data-theme="moltenCore"
+                                data-cost="750">Buy</button>
+                        </div>
+                    </div>
+                    <div class="theme-item">
+                        <h3>Crystalline</h3>
+                        <p>Planets carved from shimmering, faceted gemstones.</p>
+                        <div id="demo-crystalline" class="theme-demo-canvas"></div>
+                        <p class="theme-cost"></p>
+                        <div class="theme-button-group">
+                            <button class="theme-button demo-button" data-theme="crystalline">Demo</button>
+                            <button class="theme-button action-button" data-theme="crystalline"
+                                data-cost="750">Buy</button>
+                        </div>
+                    </div>
+                    <div class="theme-item">
+                        <h3>Cel-Shaded</h3>
+                        <p>A fun, cartoonish style with bright colors and thick outlines.</p>
+                        <div id="demo-cel" class="theme-demo-canvas"></div>
+                        <p class="theme-cost"></p>
+                        <div class="theme-button-group">
+                            <button class="theme-button demo-button" data-theme="celShaded">Demo</button>
+                            <button class="theme-button action-button" data-theme="celShaded"
+                                data-cost="750">Buy</button>
+                        </div>
+                    </div>
+                    <div class="theme-item">
+                        <h3>Default</h3>
+                        <p>Revert to the original, multi-colored cosmos.</p>
+                        <div id="demo-default" class="theme-demo-canvas"></div>
+                        <div class="theme-button-group">
+                            <button class="theme-button action-button" data-theme="default">Equip</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="settings-view" class="page-view" style="display: none;">
+            <div class="content-bar">
+                <h2>Settings</h2>
+
+                <div class="settings-section">
+                    <h3>Language</h3>
+                    <p>Your progress is saved for each language. Themes and credits are shared across all languages.</p>
+                    <div class="language-selector">
+                        <button id="current-language-btn">Spanish</button>
+                        <div id="language-options">
+                            <a href="#" data-lang="es">Spanish</a>
+                            <a href="#" data-lang="fr">French</a>
+                            <a href="#" data-lang="hi">Hindi</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <h3>Account</h3>
+                    <button id="sign-out-btn" class="theme-button">Sign Out</button>
+                </div>
+
+            </div>
+        </div>
+        <div id="practice-view" class="page-view" style="display: none;">
+            <div id="practice-game-container">
+                <div id="game-area">
+                    <div id="practice-game-canvas-container"></div>
+                    <div id="damage-overlay"></div>
+                    <div id="game-ui-overlay">
+                        <div></div>
+                        <div class="game-bottom-bar">
+                            <div id="game-stats">
+                                <span>Score: <span id="score">0</span></span>
+                                <span>Lives: <span id="lives-container"></span></span>
+                            </div>
+                            <input type="text" id="translation-input" placeholder="Type translation and press Enter"
+                                autocomplete="off">
+                        </div>
+                    </div>
+                    <div id="game-over-screen">
+                        <h1>GAME OVER</h1>
+                        <h2>Final Score: <span id="final-score">0</span></h2>
+                        <div id="missed-words-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="canvas-container"></div>
+        <div id="split-screen-border"></div>
+        <div id="right-info-panel">
+            <div id="stats-container">
+                <div class="stat-item">
+                    <div class="stat-row">
+                        <div class="stat-icon">🔥</div>
+                        <div class="stat-value" id="stat-streak">1</div>
+                    </div>
+                    <div class="stat-label">Day Streak</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-row">
+                        <div class="stat-icon">🎯</div>
+                        <div class="stat-value" id="stat-accuracy">0%</div>
+                    </div>
+                    <div class="stat-label">Today's Accuracy</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-row">
+                        <div class="stat-icon">📖</div>
+                        <div class="stat-value" id="stat-words">0</div>
+                    </div>
+                    <div class="stat-label">Words/Phrases Learned</div>
+                </div>
+            </div>
+            <div id="stats-divider"></div>
+
+            <div id="reward-progression-container">
+                <div id="reward-header">
+                    <span>Next Reward: 200 💰</span>
+                    <span id="reward-milestone-label">0/5 Sections</span>
+                </div>
+                <div id="reward-progress-bar-container">
+                    <div id="reward-progress-fill"></div>
+                    <div class="reward-marker" style="left: 20%;"></div>
+                    <div class="reward-marker" style="left: 40%;"></div>
+                    <div class="reward-marker" style="left: 60%;"></div>
+                    <div class="reward-marker" style="left: 80%;"></div>
+                    <div class="reward-marker" style="left: 100%;"></div>
+                </div>
+                <button id="claim-reward-btn" onclick="claimReward()" disabled>Claim Reward 🎁</button>
+            </div>
+
+            <div id="panel-content-area">
+                <!-- Dynamic content like sections will go here -->
+            </div>
+        </div>
+        <div id="planet-tooltip"></div>
+        <div id="section-modal-overlay"></div>
+        <div id="section-modal-overlay"></div>
+        <div id="home-prompt">click on a planet to get started</div>
+        <div id="locked-planet-popup">
+            THIS PLANET IS LOCKED!<br>COMPLETE AVAILABLE PLANETS FIRST
+        </div>
+    </div>
+
+    <div id="demo-container" style="display: none;"></div>
+
+    <div id="react-root"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tween.js/18.6.4/tween.umd.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mrdoob/three.js@r128/examples/js/renderers/CSS2DRenderer.js"></script>
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+
+    <script>
+        // TODO: Add your Firebase Configuration here
+        /*
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_AUTH_DOMAIN",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_STORAGE_BUCKET",
+            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        // Initialize Firebase
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const auth = firebase.auth();
+        */
+
+
+        // Main scene variables
+        const canvasContainer = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        canvasContainer.appendChild(renderer.domElement);
+        renderer.setClearColor(0x000000, 0);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+        scene.add(ambientLight);
+        const pointLight = new THREE.PointLight(0xffffff, 1);
+        pointLight.position.set(10, 10, 10);
+        scene.add(pointLight);
+
+        const planets = [];
+        const planetSystem = new THREE.Group();
+        scene.add(planetSystem);
+
+        const originalCameraPos = new THREE.Vector3(0, 0, 35);
+        let isZoomed = false;
+        let targetPlanet = null;
+        let hoveredPlanet = null;
+        let currentView = 'home';
+        let isShopInitialized = false;
+
+        let credits = 10000;
+        let purchasedThemes = new Set(['default']);
+        let activeTheme = 'default';
+        let languageProgress = {};
+
+        // Stats Variables
+        const storedStats = localStorage.getItem('arsha_userStats');
+        const todayStr = new Date().toDateString();
+
+        let userStats = storedStats ? JSON.parse(storedStats) : {
+            streak: 1,
+            lastLogin: todayStr,
+            correctAnswers: 0,
+            totalQuestions: 0,
+            learnedLog: [], // Store unique identifiers of words/phrases learned
+            totalSectionsCompleted: 0, // NEW: Track total cumulative sections for rewards
+            rewardsClaimed: 0 // NEW: Track how many sets of 5 have been claimed
+        };
+
+        // Migration for old stats structure if learnedLog is missing
+        if (!userStats.learnedLog) {
+            userStats.learnedLog = [];
+            // Just reset count to 0 or keep old count? Let's reset to sync with actual log to be accurate
+            userStats.wordsLearned = 0;
+        }
+
+        // Ensure count matches log size (or set it if missing)
+        userStats.wordsLearned = userStats.learnedLog.length;
+
+        // Daily Reset & Streak Logic
+        if (userStats.lastLogin !== todayStr) {
+            const lastLoginDate = new Date(userStats.lastLogin);
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            if (lastLoginDate.toDateString() === yesterday.toDateString()) {
+                userStats.streak += 1;
+            } else {
+                userStats.streak = 1;
+            }
+
+            // Reset daily accuracy counts
+            userStats.correctAnswers = 0;
+            userStats.totalQuestions = 0;
+
+            userStats.lastLogin = todayStr;
+            localStorage.setItem('arsha_userStats', JSON.stringify(userStats));
+        }
+
+        let draggedPlanet = null;
+        let isDragging = false;
+        const dragStartPos = new THREE.Vector2();
+
+        let currentLanguage = 'es';
+        const languageNames = {
+            es: 'Spanish',
+            fr: 'French',
+            hi: 'Hindi'
+        };
+
+        const planetTopics = {
+            Orange: "Greetings & Basics",
+            Green: "Food & Drink",
+            Red: "People & Possessions",
+            Pink: "Places & Navigation",
+            Blue: "Descriptions & Adjectives",
+            Purple: "Connecting Ideas"
+        };
+
+        let demoState = {
+            scene: null, camera: null, renderer: null, planets: [],
+            stars: null, animationFrameId: null
+        };
+
+        const planetData = {
+            Orange: { color: 0xDD8800, size: 3.5, pos: new THREE.Vector3(-35, 12, 0) },
+            Green: { color: 0x00CC66, size: 3.2, pos: new THREE.Vector3(-15, 18, -10) },
+            Red: { color: 0xFF4444, size: 4.0, pos: new THREE.Vector3(-28, -8, -5) },
+            Pink: { color: 0xEE66AA, size: 4.2, pos: new THREE.Vector3(-10, -5, 5) },
+            Blue: { color: 0x0088DD, size: 3.2, pos: new THREE.Vector3(-25, -20, 0) },
+            Purple: { color: 0x9966FF, size: 3.5, pos: new THREE.Vector3(-5, 10, -5) }
+        };
+
+        const themePalettes = {
+            default: { Orange: 0x58D68D, Green: 0x2ECC71, Red: 0x82E0AA, Pink: 0xABEBC6, Blue: 0x28B463, Purple: 0x1D8348 }, // Lighter Green default
+            roseateSphere: { Orange: 0xFF69B4, Green: 0xFFC0CB, Red: 0xFF1493, Pink: 0xDB7093, Blue: 0xFFAEC9, Purple: 0xFF00FF },
+            rubyRadiance: { Orange: 0xFF4500, Green: 0xDC143C, Red: 0xFF0000, Pink: 0xB22222, Blue: 0x8B0000, Purple: 0xE60026 },
+            orangeOasis: { Orange: 0xFFA500, Green: 0xFF8C00, Red: 0xFF7F50, Pink: 0xFF6347, Blue: 0xED9121, Purple: 0xFF4500 },
+            goldenGalaxy: { Orange: 0xFFD700, Green: 0xFFF8C6, Red: 0xF0E68C, Pink: 0xDAA520, Blue: 0xBDB76B, Purple: 0 - 1 },
+            emeraldExpanse: { Orange: 0x2E8B57, Green: 0x008000, Red: 0x3CB371, Pink: 0x20B2AA, Blue: 0x006400, Purple: 0x556B2F },
+            sapphireSphere: { Orange: 0x4169E1, Green: 0x00BFFF, Red: 0x1E90FF, Pink: 0x6495ED, Blue: 0x0000FF, Purple: 0x00008B },
+            violetVortex: { Orange: 0x9932CC, Green: 0xBA55D3, Red: 0x8A2BE2, Pink: 0xDA70D6, Blue: 0x4B0082, Purple: 0x800080 },
+            starlightNoir: { Orange: 0x050505, Green: 0x050505, Red: 0x050505, Pink: 0x050505, Blue: 0x050505, Purple: 0x050505 },
+            nebulaBurst: { Orange: 0xff8a00, Green: 0x4ddc90, Red: 0xff5e62, Pink: 0xea4c89, Blue: 0x3a7bd5, Purple: 0x9b59b6 },
+            blueprintGrid: { Orange: 0x004080, Green: 0x004080, Red: 0x004080, Pink: 0x004080, Blue: 0x004080, Purple: 0x004080 },
+            moltenCore: { Orange: 0x222222, Green: 0x222222, Red: 0x222222, Pink: 0x222222, Blue: 0x222222, Purple: 0x222222 },
+            crystalline: { Orange: 0xfbabaa, Green: 0x85ffbd, Red: 0xf7797d, Pink: 0xe9a7a7, Blue: 0x89f7fe, Purple: 0xc1a1d3 },
+            celShaded: { Orange: 0xfc6767, Green: 0x67fca7, Red: 0x679dfc, Pink: 0xfc67e8, Blue: 0xfcfc67, Purple: 0xae67fc }
+        };
+
+        const planetUnlockOrder = ['Orange', 'Green', 'Red', 'Pink', 'Blue', 'Purple'];
+
+        const patternFunctions = {
+            horizontalStripes: (context, c1, c2, canvas) => { context.strokeStyle = '#' + c1; context.lineWidth = 30; for (let i = 0; i < 10; i++) { context.beginPath(); context.moveTo(0, i * 30 + 15); context.lineTo(canvas.width, i * 30 + 15); context.stroke(); } },
+            seamlessDots: (context, c1, c2, canvas) => { context.fillStyle = '#' + c2; for (let i = 0; i < 150; i++) { const r = Math.random() * 15 + 5; const x = Math.random() * (canvas.width - r * 2) + r; const y = Math.random() * canvas.height; context.beginPath(); context.arc(x, y, r, 0, Math.PI * 2); context.fill(); } },
+            verticalStripes: (context, c1, c2, canvas) => { context.strokeStyle = '#' + c1; context.lineWidth = 25; for (let i = 0; i < 20; i++) { context.beginPath(); context.moveTo(i * 30 + 15, 0); context.lineTo(i * 30 + 15, canvas.height); context.stroke(); } },
+            swirlNoise: (context, c1, c2, canvas) => { for (let i = 0; i < 15000; i++) { const x = Math.random() * canvas.width; const y = Math.random() * canvas.height; context.fillStyle = '#' + (Math.random() > 0.5 ? c1 : c2); context.fillRect(x, y, 2, 2); } },
+            seamlessWaves: (context, c1, c2, canvas) => { context.strokeStyle = '#' + c2; context.lineWidth = 20; const waves = 4; for (let i = 0; i < 10; i++) { context.beginPath(); context.moveTo(0, i * 30 + 15); for (let x = 0; x < canvas.width; x++) { const yOffset = Math.sin(x * (Math.PI * 2 / canvas.width) * waves) * 10; context.lineTo(x, i * 30 + 15 + yOffset); } context.stroke(); } },
+            grid: (context, c1, c2, canvas) => { context.strokeStyle = '#' + c1; context.lineWidth = 8; for (let i = 0; i < 10; i++) { context.beginPath(); context.moveTo(0, i * 40); context.lineTo(canvas.width, i * 40); context.stroke(); } for (let i = 0; i < 20; i++) { context.beginPath(); context.moveTo(i * 40, 0); context.lineTo(i * 40, canvas.height); context.stroke(); } },
+            checkerboard: (context, c1, c2, canvas) => { const size = 32; for (let i = 0; i < canvas.width / size; i++) { for (let j = 0; j < canvas.height / size; j++) { if ((i + j) % 2 === 0) { context.fillStyle = '#' + c1; context.fillRect(i * size, j * size, size, size); } } } },
+            sparkles: (context, c1, c2, canvas) => { for (let i = 0; i < 200; i++) { const x = Math.random() * canvas.width; const y = Math.random() * canvas.height; const size = Math.random() * 3 + 1; context.fillStyle = Math.random() > 0.5 ? '#' + c1 : '#' + c2; context.fillRect(x, y, size, size); } },
+            brushedMetal: (context, c1, c2, canvas) => { for (let i = 0; i < canvas.height; i++) { const lightness = Math.random() * 0.2 + 0.8; const color = new THREE.Color(c2).multiplyScalar(lightness); context.strokeStyle = '#' + color.getHexString(); context.beginPath(); context.moveTo(0, i); context.lineTo(canvas.width, i); context.stroke(); } },
+            jaggedLines: (context, c1, c2, canvas) => { context.strokeStyle = '#' + c1; context.lineWidth = 10; for (let y = 0; y < canvas.height; y += 40) { context.beginPath(); context.moveTo(0, y); for (let x = 0; x < canvas.width; x += 20) { context.lineTo(x, y + (Math.random() - 0.5) * 30); } context.stroke(); } },
+            starfield: (context, c1, c2, canvas) => { for (let i = 0; i < 200; i++) { const x = Math.random() * canvas.width; const y = Math.random() * canvas.height; const size = Math.random() * 4 + 1; context.fillStyle = Math.random() > 0.5 ? '#' + c1 : '#' + c2; context.beginPath(); context.moveTo(x, y - size); context.lineTo(x + size * 0.3, y - size * 0.3); context.lineTo(x + size, y); context.lineTo(x + size * 0.3, y + size * 0.3); context.lineTo(x, y + size); context.lineTo(x - size * 0.3, y + size * 0.3); context.lineTo(x - size, y); context.lineTo(x - size * 0.3, y - size * 0.3); context.closePath(); context.fill(); } },
+            crosshatch: (context, c1, c2, canvas) => { context.strokeStyle = '#' + c1; context.lineWidth = 4; for (let i = -canvas.height; i < canvas.width; i += 25) { context.beginPath(); context.moveTo(i, 0); context.lineTo(i + canvas.height, canvas.height); context.stroke(); } for (let i = 0; i < canvas.width + canvas.height; i += 25) { context.beginPath(); context.moveTo(i, 0); context.lineTo(i - canvas.height, canvas.height); context.stroke(); } },
+            wireframe: (context, c1, c2, canvas) => { context.strokeStyle = '#' + c1; context.lineWidth = 1; for (let i = 0; i < canvas.width; i += 15) { context.beginPath(); context.moveTo(i, 0); context.lineTo(i, canvas.height); context.stroke(); } for (let j = 0; j < canvas.height; j += 15) { context.beginPath(); context.moveTo(0, j); context.lineTo(canvas.width, j); context.stroke(); } },
+            cracks: (context, c1, c2, canvas) => { context.lineWidth = 1.5; context.strokeStyle = '#' + c1; for (let i = 0; i < 25; i++) { context.beginPath(); context.moveTo(Math.random() * canvas.width, Math.random() * canvas.height); for (let j = 0; j < 5; j++) { context.lineTo(Math.random() * canvas.width, Math.random() * canvas.height); } context.stroke(); } },
+            facets: (context, c1, c2, canvas) => { for (let i = 0; i < 150; i++) { context.beginPath(); context.moveTo(Math.random() * canvas.width, Math.random() * canvas.height); context.lineTo(Math.random() * canvas.width, Math.random() * canvas.height); context.lineTo(Math.random() * canvas.width, Math.random() * canvas.height); context.closePath(); const shade = new THREE.Color(c1).multiplyScalar(Math.random() * 0.4 + 0.8); context.fillStyle = '#' + shade.getHexString(); context.fill(); } },
+            nebula: (context, c1, c2, canvas) => { for (let i = 0; i < 15; i++) { const x = Math.random() * canvas.width; const y = Math.random() * canvas.height; const r1 = Math.random() * 100; const r2 = r1 + Math.random() * 50; const grad = context.createRadialGradient(x, y, r1, x, y, r2); const randColor1 = new THREE.Color(0xffffff).lerp(new THREE.Color(c1), Math.random()).getHexString(); const randColor2 = new THREE.Color(0xffffff).lerp(new THREE.Color(c2), Math.random()).getHexString(); grad.addColorStop(0, '#' + randColor1 + '80'); grad.addColorStop(1, '#' + randColor2 + '00'); context.fillStyle = grad; context.fillRect(0, 0, canvas.width, canvas.height); } }
+        };
+        const themePatterns = {
+            default: ['horizontalStripes', 'seamlessDots', 'verticalStripes', 'swirlNoise', 'seamlessWaves', 'grid'],
+            roseateSphere: ['seamlessWaves', 'sparkles', 'grid', 'checkerboard', 'horizontalStripes', 'swirlNoise'],
+            rubyRadiance: ['jaggedLines', 'crosshatch', 'starfield', 'swirlNoise', 'checkerboard', 'sparkles'],
+            orangeOasis: ['seamlessDots', 'seamlessWaves', 'horizontalStripes', 'swirlNoise', 'checkerboard', 'grid'],
+            goldenGalaxy: ['starfield', 'sparkles', 'grid', 'swirlNoise', 'horizontalStripes', 'seamlessDots'],
+            emeraldExpanse: ['seamlessWaves', 'seamlessDots', 'verticalStripes', 'swirlNoise', 'horizontalStripes', 'jaggedLines'],
+            sapphireSphere: ['starfield', 'crosshatch', 'verticalStripes', 'jaggedLines', 'sparkles', 'grid'],
+            violetVortex: ['swirlNoise', 'sparkles', 'starfield', 'seamlessWaves', 'grid', 'crosshatch'],
+            starlightNoir: ['starfield', 'sparkles', 'starfield', 'sparkles', 'starfield', 'sparkles'],
+            nebulaBurst: ['nebula', 'nebula', 'nebula', 'nebula', 'nebula', 'nebula'],
+            blueprintGrid: ['wireframe', 'wireframe', 'wireframe', 'wireframe', 'wireframe', 'wireframe'],
+            moltenCore: ['cracks', 'cracks', 'cracks', 'cracks', 'cracks', 'cracks'],
+            crystalline: ['facets', 'facets', 'facets', 'facets', 'facets', 'facets'],
+            celShaded: ['', '', '', '', '', ''] // Special case, no pattern needed
+        };
+
+        const themeUI = {
+            default: {
+                header: 'linear-gradient(180deg, rgba(46, 204, 113, 0.8) 0%, rgba(39, 174, 96, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #58D68D, #2ECC71)'
+            },
+            roseateSphere: {
+                header: 'linear-gradient(180deg, rgba(255, 105, 180, 0.6) 0%, rgba(139, 0, 139, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #FF69B4, #C71585)'
+            },
+            rubyRadiance: {
+                header: 'linear-gradient(180deg, rgba(220, 20, 60, 0.6) 0%, rgba(139, 0, 0, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #FF4500, #8B0000)'
+            },
+            orangeOasis: {
+                header: 'linear-gradient(180deg, rgba(255, 140, 0, 0.6) 0%, rgba(139, 69, 19, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #FFA500, #FF4500)'
+            },
+            goldenGalaxy: {
+                header: 'linear-gradient(180deg, rgba(255, 215, 0, 0.6) 0%, rgba(184, 134, 11, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #FFD700, #B8860B)'
+            },
+            emeraldExpanse: {
+                header: 'linear-gradient(180deg, rgba(46, 139, 87, 0.6) 0%, rgba(0, 100, 0, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #2E8B57, #006400)'
+            },
+            sapphireSphere: {
+                header: 'linear-gradient(180deg, rgba(65, 105, 225, 0.6) 0%, rgba(0, 0, 139, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #4169E1, #00008B)'
+            },
+            violetVortex: {
+                header: 'linear-gradient(180deg, rgba(138, 43, 226, 0.6) 0%, rgba(75, 0, 130, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #BA55D3, #4B0082)'
+            },
+            starlightNoir: {
+                header: 'linear-gradient(180deg, rgba(50, 50, 50, 0.6) 0%, rgba(0, 0, 0, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #ffffff, #888888)'
+            },
+            nebulaBurst: {
+                header: 'linear-gradient(180deg, rgba(255, 94, 98, 0.6) 0%, rgba(58, 123, 213, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #ff9966, #ff5e62)'
+            },
+            blueprintGrid: {
+                header: 'linear-gradient(180deg, rgba(0, 64, 128, 0.6) 0%, rgba(0, 32, 64, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #007bff, #004080)'
+            },
+            moltenCore: {
+                header: 'linear-gradient(180deg, rgba(255, 69, 0, 0.6) 0%, rgba(50, 20, 20, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #ff4500, #8b0000)'
+            },
+            crystalline: {
+                header: 'linear-gradient(180deg, rgba(137, 247, 254, 0.6) 0%, rgba(102, 166, 255, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #a1c4fd, #c2e9fb)'
+            },
+            celShaded: {
+                header: 'linear-gradient(180deg, rgba(252, 103, 103, 0.6) 0%, rgba(236, 0, 140, 0.4) 60%, rgba(0,0,0,0) 100%)',
+                text: 'linear-gradient(45deg, #fc6767, #ec008c)'
+            }
+        };
+
+        function generatePlanetTexture(color, name, isLocked, theme) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 256;
+            const context = canvas.getContext('2d');
+            const c = isLocked ? new THREE.Color(0x888888) : new THREE.Color(color);
+
+            context.fillStyle = '#' + c.getHexString();
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            if (isLocked) return new THREE.CanvasTexture(canvas);
+
+            const darkerColor = c.clone().multiplyScalar(0.7).getHexString();
+            const lighterColor = c.clone().multiplyScalar(1.3).getHexString();
+
+            const themeToUse = themePatterns[theme] ? theme : 'default';
+            const planetIndex = planetUnlockOrder.indexOf(name);
+            const patternsForTheme = themePatterns[themeToUse];
+            const patternName = patternsForTheme[planetIndex % patternsForTheme.length];
+
+            if (patternName === '') return new THREE.CanvasTexture(canvas);
+
+            const patternFunc = patternFunctions[patternName];
+
+            if (patternFunc) {
+                let p1 = darkerColor, p2 = lighterColor;
+                if (theme === 'starlightNoir') { p1 = 'FFFFFF'; p2 = 'FFFFFF'; }
+                if (theme === 'moltenCore') { p1 = 'ff8c00'; p2 = 'ff4500'; }
+                if (theme === 'blueprintGrid') { p1 = 'FFFFFF'; }
+
+                patternFunc(context, p1, p2, canvas);
+            }
+
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function createDemoPlanet(containerId, theme, planetName) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            const demoScene = new THREE.Scene();
+            const demoCamera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            const demoRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            demoRenderer.setSize(container.clientWidth, container.clientHeight);
+            demoRenderer.setClearColor(0x000000, 0);
+            container.appendChild(demoRenderer.domElement);
+
+            const demoAmbient = new THREE.AmbientLight(0xffffff, 0.7);
+            demoScene.add(demoAmbient);
+            const demoPoint = new THREE.PointLight(0xffffff, 1);
+            demoPoint.position.set(3, 3, 3);
+            demoScene.add(demoPoint);
+
+            const size = 3;
+            const color = themePalettes[theme][planetName];
+
+            const demoPlanetGroup = new THREE.Group();
+            demoScene.add(demoPlanetGroup);
+
+            const geometry = new THREE.SphereGeometry(size, 32, 32);
+            const texture = generatePlanetTexture(color, planetName, false, theme);
+            const material = new THREE.MeshToonMaterial({ color, map: texture });
+
+            const planet = new THREE.Mesh(geometry, material);
+            demoPlanetGroup.add(planet);
+
+            const outlineSize = theme === 'celShaded' ? 1.15 : (theme === 'starlightNoir' ? 1.05 : 0);
+            if (outlineSize > 0) {
+                const outlineColor = theme === 'starlightNoir' ? 0xffffff : 0x000000;
+                const outlineGeometry = new THREE.SphereGeometry(size * outlineSize, 32, 32);
+                const outlineMaterial = new THREE.MeshBasicMaterial({ color: outlineColor, side: THREE.BackSide });
+                const outline = new THREE.Mesh(outlineGeometry, outlineMaterial);
+                demoPlanetGroup.add(outline);
+            }
+
+            demoPlanetGroup.rotation.x = 0.4;
+            demoPlanetGroup.rotation.y = -0.2;
+
+            demoCamera.position.z = 7;
+
+            function animateDemo() {
+                requestAnimationFrame(animateDemo);
+                demoPlanetGroup.rotation.y += 0.005;
+                demoRenderer.render(demoScene, demoCamera);
+            }
+            animateDemo();
+        }
+
+        function updateRightPanelStats() {
+            document.getElementById('stat-streak').textContent = userStats.streak;
+            const acc = userStats.totalQuestions === 0 ? 0 : Math.round((userStats.correctAnswers / userStats.totalQuestions) * 100);
+            document.getElementById('stat-accuracy').textContent = `${acc}%`;
+            document.getElementById('stat-words').textContent = userStats.wordsLearned;
+        }
+
+        const SECTIONS_PER_REWARD = 5;
+        const REWARD_AMOUNT = 200;
+
+        function updateRewardUI() {
+            const total = userStats.totalSectionsCompleted || 0;
+            const claimed = userStats.rewardsClaimed || 0;
+
+            // Current progress in this cycle (0 to 5)
+            // If we have completed 7 sections and claimed 1 reward (5 sections), progress is 2.
+            // If we have completed 7 sections and claimed 0 rewards, progress is 5 (capped) waiting to claim.
+
+            let progressInCycle = total - (claimed * SECTIONS_PER_REWARD);
+            if (progressInCycle > SECTIONS_PER_REWARD) progressInCycle = SECTIONS_PER_REWARD;
+
+            const perc = (progressInCycle / SECTIONS_PER_REWARD) * 100;
+
+            document.getElementById('reward-progress-fill').style.width = `${perc}%`;
+            document.getElementById('reward-milestone-label').textContent = `${progressInCycle}/${SECTIONS_PER_REWARD} Sections`;
+
+            const btn = document.getElementById('claim-reward-btn');
+            if (progressInCycle >= SECTIONS_PER_REWARD) {
+                btn.classList.add('active');
+                btn.disabled = false;
+                btn.textContent = "Claim Reward! 🎁";
+            } else {
+                btn.classList.remove('active');
+                btn.disabled = true;
+                btn.textContent = "Claim Reward 🎁";
+            }
+        }
+
+        function claimReward() {
+            const total = userStats.totalSectionsCompleted || 0;
+            const claimed = userStats.rewardsClaimed || 0;
+            const progressInCycle = total - (claimed * SECTIONS_PER_REWARD);
+
+            if (progressInCycle >= SECTIONS_PER_REWARD) {
+                // Grant Reward
+                credits += REWARD_AMOUNT;
+                updateCreditDisplay();
+
+                // Update Stats
+                userStats.rewardsClaimed = (userStats.rewardsClaimed || 0) + 1;
+                localStorage.setItem('arsha_userStats', JSON.stringify(userStats));
+
+                // Visual Feedback (Simple confetti-like effect or just button anim)
+                const btn = document.getElementById('claim-reward-btn');
+                btn.textContent = "Claimed! +200 💰";
+                setTimeout(() => updateRewardUI(), 1500);
+            }
+        }
+
+        function init() {
+            camera.position.copy(originalCameraPos);
+            camera.lookAt(scene.position);
+            const homePrompt = document.getElementById('home-prompt');
+            homePrompt.style.opacity = 1;
+
+            updateRightPanelStats();
+            updateRewardUI();
+
+            function createPlanet(data, targetScene, theme = activeTheme) {
+                const name = data.name;
+                const isLocked = !languageProgress[currentLanguage].unlockedPlanets.has(name) && targetScene === scene;
+                const planetGroup = new THREE.Group();
+                planetGroup.userData = data;
+
+                const color = themePalettes[theme][name];
+                const mainColor = isLocked ? new THREE.Color(0x888888) : new THREE.Color(color);
+
+                const geometry = new THREE.SphereGeometry(data.size, 32, 32);
+                const planetTexture = generatePlanetTexture(color, name, isLocked, theme);
+                const material = new THREE.MeshToonMaterial({ color: mainColor, map: planetTexture, transparent: true, opacity: 1 });
+                const planet = new THREE.Mesh(geometry, material);
+                planetGroup.add(planet);
+
+                const isStarlightNoir = theme === 'starlightNoir';
+                const isCelShaded = theme === 'celShaded';
+
+                const outlineColor = isLocked ? 0x444444 : (isStarlightNoir ? 0xffffff : 0x000000);
+                const outlineSize = isCelShaded ? 1.15 : 1.05;
+
+                const outlineGeometry = new THREE.SphereGeometry(data.size * outlineSize, 32, 32);
+                const outlineMaterial = new THREE.MeshBasicMaterial({ color: outlineColor, side: THREE.BackSide, transparent: true, opacity: 1 });
+                const outline = new THREE.Mesh(outlineGeometry, outlineMaterial);
+                planetGroup.add(outline);
+
+                const ringGeometry = new THREE.RingGeometry(data.size * 1.3, data.size * 1.8, 32);
+                const ringColor = isLocked ? new THREE.Color(0x666666) : (isStarlightNoir || theme === 'blueprintGrid' ? new THREE.Color(0xffffff) : new THREE.Color(color).multiplyScalar(0.4));
+                const ringMaterial = new THREE.MeshToonMaterial({ color: ringColor, side: THREE.DoubleSide, transparent: true, opacity: 1 });
+                const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+                ring.rotation.x = Math.PI / 2 + (Math.random() - 0.5) * 0.5;
+                ring.rotation.y = (Math.random() - 0.5) * 0.5;
+                planetGroup.add(ring);
+
+                const ringGeometry2 = new THREE.RingGeometry(data.size * 1.9, data.size * 2.1, 32);
+                const ringColor2 = isLocked ? new THREE.Color(0x777777) : (isStarlightNoir || theme === 'blueprintGrid' ? new THREE.Color(0xffffff) : new THREE.Color(color).multiplyScalar(0.6));
+                const ringMaterial2 = new THREE.MeshToonMaterial({ color: ringColor2, side: THREE.DoubleSide, transparent: true, opacity: 1 });
+                const ring2 = new THREE.Mesh(ringGeometry2, ringMaterial2);
+                ring2.rotation.x = ring.rotation.x;
+                ring2.rotation.y = ring.rotation.y;
+                planetGroup.add(ring2);
+
+                planetGroup.position.copy(data.pos);
+                return planetGroup;
+            }
+
+            function resetAndRebuildScene() {
+                while (planetSystem.children.length > 0) {
+                    planetSystem.remove(planetSystem.children[0]);
+                }
+                planets.length = 0;
+
+                planetUnlockOrder.forEach(name => {
+                    const planetGroup = createPlanet({ name, ...planetData[name] }, scene);
+                    planets.push(planetGroup);
+                    planetSystem.add(planetGroup);
+                });
+            }
+
+            const starVertices = [];
+            for (let i = 0; i < 10000; i++) starVertices.push(THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000));
+            const starGeometry = new THREE.BufferGeometry();
+            starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+            const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, opacity: 1 });
+            const stars = new THREE.Points(starGeometry, starMaterial);
+            scene.add(stars);
+
+            const raycaster = new THREE.Raycaster();
+            const mouse = new THREE.Vector2();
+
+            const tooltip = document.getElementById('planet-tooltip');
+
+            function animate() {
+                requestAnimationFrame(animate);
+                TWEEN.update();
+
+                renderer.setClearColor(0x000000, currentView === 'home' && !isZoomed ? 1 : 0);
+
+                if (!isDragging && !isZoomed && currentView === 'home') {
+                    raycaster.setFromCamera(mouse, camera);
+                    const planetMeshes = planets.map(p => p.children[0]);
+                    const intersects = raycaster.intersectObjects(planetMeshes);
+                    const newHoveredPlanet = intersects.length > 0 ? intersects[0].object.parent : null;
+
+                    if (hoveredPlanet !== newHoveredPlanet) {
+                        if (hoveredPlanet) {
+                            new TWEEN.Tween(hoveredPlanet.scale).to({ x: 1, y: 1, z: 1 }, 300).easing(TWEEN.Easing.Quadratic.Out).start();
+                            hideTooltip();
+                        }
+                        if (newHoveredPlanet) {
+                            new TWEEN.Tween(newHoveredPlanet.scale).to({ x: 1.1, y: 1.1, z: 1.1 }, 300).easing(TWEEN.Easing.Quadratic.Out).start();
+                            showPlanetTooltip(newHoveredPlanet);
+                        }
+                        hoveredPlanet = newHoveredPlanet;
+                    }
+                    canvasContainer.style.cursor = newHoveredPlanet && languageProgress[currentLanguage].unlockedPlanets.has(newHoveredPlanet.userData.name) ? 'pointer' : 'default';
+                }
+
+                planets.forEach(p => { p.rotation.y += 0.002; });
+
+                if (!isZoomed && TWEEN.getAll().length === 0) {
+                    stars.material.opacity = Math.abs(Math.sin(Date.now() * 0.0005 * 0.7)) * 0.2 + 0.8;
+                }
+                renderer.render(scene, camera);
+            }
+
+            function initializeState() {
+                Object.keys(languageNames).forEach(lang => {
+                    languageProgress[lang] = {
+                        unlockedPlanets: new Set(['Orange']),
+                        completedSections: {}
+                    };
+                });
+            }
+
+            function switchLanguage(newLang) {
+                if (newLang === currentLanguage) return;
+
+                currentLanguage = newLang;
+
+                updateCreditDisplay();
+                updateShopUI();
+                document.getElementById('current-language-btn').textContent = languageNames[newLang];
+
+                resetAndRebuildScene();
+            }
+
+            initializeState();
+            resetAndRebuildScene();
+            animate();
+
+            updateCreditDisplay();
+            updateShopUI();
+
+            function onMouseDown(event) {
+                if (isZoomed || currentView !== 'home') return;
+
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                dragStartPos.set(event.clientX, event.clientY);
+
+                raycaster.setFromCamera(mouse, camera);
+                const allPlanetMeshes = planets.map(p => p.children[0]);
+                const intersects = raycaster.intersectObjects(allPlanetMeshes);
+
+                if (intersects.length > 0) {
+                    draggedPlanet = intersects[0].object.parent;
+                    canvasContainer.style.cursor = 'grabbing';
+                }
+            }
+
+            function onMouseMove(event) {
+                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+                if (draggedPlanet) {
+                    const dragEndPos = new THREE.Vector2(event.clientX, event.clientY);
+                    if (dragStartPos.distanceTo(dragEndPos) > 5) {
+                        isDragging = true;
+                        if (hoveredPlanet) {
+                            new TWEEN.Tween(hoveredPlanet.scale).to({ x: 1, y: 1, z: 1 }, 100).start();
+                            hoveredPlanet = null;
+                        }
+                        hideTooltip();
+                    }
+
+                    if (isDragging) {
+                        const vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+                        vector.unproject(camera);
+                        const dir = vector.sub(camera.position).normalize();
+                        const distance = (draggedPlanet.position.z - camera.position.z) / dir.z;
+                        const pos = camera.position.clone().add(dir.multiplyScalar(distance));
+
+                        const vFOV = THREE.MathUtils.degToRad(camera.fov);
+                        const distFromCamera = camera.position.z - draggedPlanet.position.z;
+                        const height = 2 * Math.tan(vFOV / 2) * distFromCamera;
+                        const width = height * camera.aspect;
+                        const selfRadius = draggedPlanet.userData.size * 2.1;
+
+                        const minX = -width / 2 + selfRadius;
+                        const maxX = 0 - selfRadius;
+                        const minY = -height / 2 + selfRadius;
+
+                        // Calculate maxY to stop below the nav bar (roughly 180px from top)
+                        // Map 180px to world coordinates at planet depth
+                        const topBorderY = height / 2 - (180 / window.innerHeight) * height;
+                        const maxY = topBorderY - selfRadius;
+
+                        const proposedX = Math.max(minX, Math.min(maxX, pos.x));
+                        const proposedY = Math.max(minY, Math.min(maxY, pos.y));
+
+                        const proposedPosition = new THREE.Vector3(proposedX, proposedY, draggedPlanet.position.z);
+                        let collision = false;
+
+                        for (const planet of planets) {
+                            if (planet === draggedPlanet) continue;
+
+                            const distanceBetween = proposedPosition.distanceTo(planet.position);
+                            const otherRadius = planet.userData.size * 2.1;
+
+                            if (distanceBetween < selfRadius + otherRadius) {
+                                collision = true;
+                                break;
+                            }
+                        }
+
+                        if (!collision) {
+                            draggedPlanet.position.x = proposedX;
+                            draggedPlanet.position.y = proposedY;
+                        }
+                    }
+                }
+            }
+
+            function onMouseUp(event) {
+                if (isZoomed || currentView !== 'home') return;
+
+                if (!isDragging && hoveredPlanet) {
+                    if (languageProgress[currentLanguage].unlockedPlanets.has(hoveredPlanet.userData.name)) {
+                        showSectionModal(hoveredPlanet);
+                    } else {
+                        // LOCKED PLANET CLICK
+                        const popup = document.getElementById('locked-planet-popup');
+                        popup.style.display = 'block';
+
+                        // Hide after 3 seconds
+                        if (window.lockedPopupTimeout) clearTimeout(window.lockedPopupTimeout);
+                        window.lockedPopupTimeout = setTimeout(() => {
+                            popup.style.display = 'none';
+                        }, 3000);
+                    }
+                }
+
+                draggedPlanet = null;
+                isDragging = false;
+            }
+
+            function startLesson(planet, sectionIndex) {
+                hideTooltip();
+                hideSectionModal();
+
+                const planetName = planet.userData.name;
+                const planetSections = languageProgress[currentLanguage].completedSections[planetName] || [];
+                const isAlreadyCompleted = planetSections.includes(sectionIndex + 1);
+
+                const appContainer = document.getElementById('app-container');
+                appContainer.style.opacity = '0';
+                setTimeout(() => { appContainer.style.display = 'none'; }, 500);
+
+                const event = new CustomEvent('startQuiz', {
+                    detail: {
+                        color: `#${new THREE.Color(themePalettes[activeTheme][planetName]).getHexString()}`,
+                        planetName: planet.userData.name,
+                        lang: currentLanguage,
+                        sectionIndex: sectionIndex,
+                        isAlreadyCompleted: isAlreadyCompleted
+                    }
+                });
+                window.dispatchEvent(event);
+            }
+
+            function zoomOut() {
+                isZoomed = false;
+                targetPlanet = null;
+                const appContainer = document.getElementById('app-container');
+                appContainer.style.display = 'block';
+                setTimeout(() => { appContainer.style.opacity = '1'; }, 10);
+
+                planetSystem.traverse(child => { if (child.material) { child.visible = true; new TWEEN.Tween(child.material).to({ opacity: 1 }, 1200).start(); } });
+                stars.visible = true;
+                new TWEEN.Tween(stars.material).to({ opacity: 1 }, 1200).start();
+                new TWEEN.Tween(camera.position).to(originalCameraPos, 1200).start();
+                new TWEEN.Tween(scene.background).to(new THREE.Color(0x000000), 1200).start();
+                document.querySelector('.top-menu').style.opacity = 1;
+            }
+
+            function unlockPlanet(planetName) {
+                languageProgress[currentLanguage].unlockedPlanets.add(planetName);
+                resetAndRebuildScene(); // Rebuild to show unlocked state
+            }
+
+            function switchView(newView) {
+                if (newView === currentView) return;
+
+                const homePrompt = document.getElementById('home-prompt');
+                hideTooltip();
+
+                const wasPractice = currentView === 'practice';
+                if (wasPractice && typeof stopPracticeGame === 'function') {
+                    stopPracticeGame();
+                }
+
+                if (currentView !== 'home') {
+                    const currentViewEl = document.getElementById(currentView + '-view');
+                    const contentToHide = currentViewEl.querySelector('.content-bar, #practice-game-container');
+                    if (contentToHide) {
+                        contentToHide.classList.replace('animate__fadeIn', 'animate__fadeOut');
+                        setTimeout(() => currentViewEl.style.display = 'none', 500);
+                    } else {
+                        currentViewEl.style.display = 'none';
+                    }
+                }
+
+                const homeHeader = document.getElementById('home-header');
+                const topMenu = document.querySelector('.top-menu');
+                const rightInfoPanel = document.getElementById('right-info-panel');
+                if (newView === 'home') {
+                    homeHeader.style.display = 'block';
+                    topMenu.style.top = '120px';
+                    homePrompt.style.opacity = 1;
+                    if (rightInfoPanel) rightInfoPanel.style.opacity = '1';
+                } else {
+                    homeHeader.style.display = 'none';
+                    topMenu.style.top = '20px';
+                    homePrompt.style.opacity = 0;
+                    if (rightInfoPanel) rightInfoPanel.style.opacity = '0';
+                }
+
+                if (newView === 'home') {
+                    planetSystem.visible = true;
+                    stars.visible = true;
+                    planetSystem.traverse(child => { if (child.material) new TWEEN.Tween(child.material).to({ opacity: 1 }, 500).start(); });
+                } else {
+                    if (newView !== 'practice') { // Hide planets for shop/settings
+                        planetSystem.traverse(child => { if (child.material) new TWEEN.Tween(child.material).to({ opacity: 0 }, 500).start(); });
+                        setTimeout(() => planetSystem.visible = false, 500);
+                    } else if (wasPractice) { // If coming FROM practice, planets are already hidden.
+                        planetSystem.visible = false;
+                    }
+
+
+                    const newViewEl = document.getElementById(newView + '-view');
+                    newViewEl.style.display = 'flex';
+
+                    if (newView === 'shop' && !isShopInitialized) {
+                        createDemoPlanet('demo-roseate', 'roseateSphere', 'Orange');
+                        createDemoPlanet('demo-red', 'rubyRadiance', 'Green');
+                        createDemoPlanet('demo-orange', 'orangeOasis', 'Orange');
+                        createDemoPlanet('demo-yellow', 'goldenGalaxy', 'Orange');
+                        createDemoPlanet('demo-green', 'emeraldExpanse', 'Red');
+                        createDemoPlanet('demo-blue', 'sapphireSphere', 'Pink');
+                        createDemoPlanet('demo-violet', 'violetVortex', 'Orange');
+                        createDemoPlanet('demo-default', 'default', 'Blue');
+                        createDemoPlanet('demo-noir', 'starlightNoir', 'Purple');
+                        createDemoPlanet('demo-nebula', 'nebulaBurst', 'Pink');
+                        createDemoPlanet('demo-blueprint', 'blueprintGrid', 'Blue');
+                        createDemoPlanet('demo-molten', 'moltenCore', 'Red');
+                        createDemoPlanet('demo-crystalline', 'crystalline', 'Green');
+                        createDemoPlanet('demo-cel', 'celShaded', 'Orange');
+                        isShopInitialized = true;
+                    }
+
+                    if (newView === 'practice') {
+                        initPracticeGame();
+                        startPracticeGame(); // Automatically start the game
+                        planetSystem.visible = false;
+                        stars.visible = false;
+                    } else {
+                        stars.visible = true;
+                    }
+
+                    const contentToShow = newViewEl.querySelector('.content-bar, #practice-game-container');
+                    if (contentToShow) {
+                        contentToShow.className = contentToShow.className.replace(' animate__fadeOut', '') + ' animate__animated animate__fadeIn';
+                    }
+                }
+
+                document.querySelector(`.menu-item.active`).classList.remove('active');
+                document.querySelector(`.menu-item[data-view="${newView}"]`).classList.add('active');
+                currentView = newView;
+            }
+
+            function updateCreditDisplay() {
+                const coinSVG = `<svg width="24" height="24" viewBox="0 0 24 24" style="margin-right: 8px;">
+                                    <circle cx="12" cy="12" r="10" fill="#ffd700" stroke="#b8860b" stroke-width="2"></circle>
+                                    <text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="12" font-weight="bold" fill="#b8860b">$</text>
+                                </svg>`;
+                document.querySelector('.credit-display').innerHTML = `${coinSVG} ${credits}`;
+            }
+
+            function updateShopUI() {
+                document.querySelectorAll('.theme-item').forEach(item => {
+                    const actionButton = item.querySelector('.action-button');
+                    if (!actionButton) return;
+
+                    const theme = actionButton.dataset.theme;
+                    const costEl = item.querySelector('.theme-cost');
+
+                    if (theme === activeTheme) {
+                        actionButton.textContent = 'Equipped';
+                        actionButton.classList.add('equipped');
+                        actionButton.disabled = true;
+                        if (costEl) costEl.style.display = 'none';
+                    } else if (purchasedThemes.has(theme)) {
+                        actionButton.textContent = 'Equip';
+                        actionButton.classList.remove('equipped', 'disabled');
+                        actionButton.disabled = false;
+                        if (costEl) costEl.style.display = 'none';
+                    } else { // Not purchased
+                        actionButton.textContent = 'Buy';
+                        actionButton.classList.remove('equipped');
+                        const cost = parseInt(actionButton.dataset.cost);
+                        actionButton.disabled = credits < cost;
+                        if (actionButton.disabled) {
+                            actionButton.classList.add('disabled');
+                        } else {
+                            actionButton.classList.remove('disabled');
+                        }
+
+                        if (costEl) {
+                            costEl.textContent = `${cost} Credits`;
+                            costEl.style.display = 'block';
+                        }
+                    }
+                });
+            }
+
+            function applyTheme(themeName) {
+                if (activeTheme === themeName) return;
+                activeTheme = themeName;
+
+                // NEW: Apply UI Theme
+                const ui = themeUI[themeName] || themeUI['default'];
+                const header = document.getElementById('home-header');
+                const title = document.querySelector('#home-header h1');
+
+                if (header) header.style.background = ui.header;
+                if (title) title.style.backgroundImage = ui.text;
+
+                resetAndRebuildScene();
+                updateShopUI();
+            }
+
+            function startDemo(themeName) {
+                const demoContainer = document.getElementById('demo-container');
+                demoContainer.innerHTML = '';
+                demoContainer.style.display = 'block';
+
+                demoState.scene = new THREE.Scene();
+                demoState.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                demoState.renderer = new THREE.WebGLRenderer({ antialias: true });
+                demoState.renderer.setSize(window.innerWidth, window.innerHeight);
+                demoContainer.appendChild(demoState.renderer.domElement);
+
+                const exitBtn = document.createElement('button');
+                exitBtn.id = 'exit-demo-button';
+                exitBtn.className = 'theme-button';
+                exitBtn.textContent = 'Exit Demo';
+                exitBtn.addEventListener('click', exitDemoMode);
+                demoContainer.appendChild(exitBtn);
+
+                const demoAmbient = new THREE.AmbientLight(0xffffff, 0.7);
+                demoState.scene.add(demoAmbient);
+                const demoPoint = new THREE.PointLight(0xffffff, 1);
+                demoPoint.position.set(10, 10, 10);
+                demoState.scene.add(demoPoint);
+
+                demoState.planets = [];
+                planetUnlockOrder.forEach(name => {
+                    const planetGroup = createPlanet({ name, ...planetData[name] }, demoState.scene, themeName);
+                    demoState.planets.push(planetGroup);
+                    demoState.scene.add(planetGroup);
+                });
+
+                const starVertices = [];
+                for (let i = 0; i < 10000; i++) starVertices.push(THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000));
+                const starGeometry = new THREE.BufferGeometry();
+                starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+                const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, opacity: 1 });
+                demoState.stars = new THREE.Points(starGeometry, starMaterial);
+                demoState.scene.add(demoState.stars);
+
+                demoState.camera.position.copy(originalCameraPos);
+
+                document.querySelector('.top-menu').style.opacity = 0;
+
+                function animateDemoScene() {
+                    demoState.animationFrameId = requestAnimationFrame(animateDemoScene);
+                    demoState.planets.forEach(p => p.rotation.y += 0.002);
+                    if (demoState.stars) {
+                        demoState.stars.material.opacity = Math.abs(Math.sin(Date.now() * 0.0005 * 0.7)) * 0.2 + 0.8;
+                    }
+                    demoState.renderer.render(demoState.scene, demoState.camera);
+                }
+                animateDemoScene();
+            }
+
+            function exitDemoMode() {
+                if (demoState.animationFrameId) {
+                    cancelAnimationFrame(demoState.animationFrameId);
+                }
+                const demoContainer = document.getElementById('demo-container');
+                demoContainer.style.display = 'none';
+                demoContainer.innerHTML = '';
+
+                demoState = { scene: null, camera: null, renderer: null, planets: [], stars: null, animationFrameId: null };
+                document.querySelector('.top-menu').style.opacity = 1;
+            }
+
+            function showPlanetTooltip(planet) {
+                const planetName = planet.userData.name;
+                const topic = planetTopics[planetName];
+                const isLocked = !languageProgress[currentLanguage].unlockedPlanets.has(planetName);
+
+                if (isLocked) {
+                    tooltip.innerHTML = `<h4 style="color: #999999; margin-bottom: 0;">${topic}</h4>`;
+                } else {
+                    const planetSections = languageProgress[currentLanguage].completedSections[planetName] || [];
+                    const progress = (planetSections.length / 5) * 100;
+
+                    const planetColorHex = themePalettes[activeTheme][planetName];
+                    const planetThreeColor = new THREE.Color(planetColorHex);
+                    const colorString = `#${planetThreeColor.getHexString()}`;
+                    const luminance = (0.299 * planetThreeColor.r + 0.587 * planetThreeColor.g + 0.114 * planetThreeColor.b);
+                    const isDark = luminance < 0.4;
+                    const textColor = isDark ? '#FFFFFF' : colorString;
+
+                    tooltip.innerHTML = `
+                        <h4 style="color: ${textColor};">${topic}</h4>
+                        <div class="progress-bar">
+                            <div class="progress-bar-inner" style="width: ${progress}%; background-color: ${colorString};"></div>
+                        </div>
+                    `;
+                }
+
+                tooltip.style.left = `${(mouse.x + 1) / 2 * window.innerWidth + 20}px`;
+                tooltip.style.top = `${(-mouse.y + 1) / 2 * window.innerHeight - 40}px`;
+                tooltip.style.opacity = 1;
+            }
+
+            function hideTooltip() {
+                tooltip.style.opacity = 0;
+            }
+
+            const modalOverlay = document.getElementById('section-modal-overlay');
+            function showSectionModal(planet) {
+                document.getElementById('home-prompt').style.opacity = 0;
+                hideTooltip();
+                const planetName = planet.userData.name;
+                const planetSections = languageProgress[currentLanguage].completedSections[planetName] || [];
+                const color = `#${new THREE.Color(themePalettes[activeTheme][planetName]).getHexString()}`;
+
+                const pastelColors = ['#b3e2cd', '#fdcdac', '#cbd5e8', '#f4cae4', '#fff2ae'];
+
+                let content = `
+                    <div class="section-modal-content">
+                        <button class="section-modal-close">✕</button>
+                        <h2 style="color: ${color};">${planetTopics[planetName]}</h2>
+                        <div class="section-grid">
+                `;
+                for (let i = 0; i < 5; i++) {
+                    const sectionNum = i + 1;
+                    const isCompleted = planetSections.includes(sectionNum);
+                    const isUnlocked = i === 0 || planetSections.includes(i);
+
+                    let buttonClasses = 'section-button';
+                    let buttonStyle = '';
+                    if (isCompleted) {
+                        buttonClasses += ' completed';
+                        const pastelColor = pastelColors[i % pastelColors.length];
+                        buttonStyle = `style="background-color: ${pastelColor}; border-color: ${pastelColor};"`;
+                    } else if (isUnlocked) {
+                        buttonClasses += ' unlocked';
+                    }
+
+                    content += `
+                        <button 
+                            class="${buttonClasses}"
+                            ${isUnlocked ? '' : 'disabled'}
+                            data-section="${i}"
+                            ${buttonStyle}
+                        >
+                            SECTION ${sectionNum}
+                        </button>
+                    `;
+                }
+                content += `</div></div>`;
+                modalOverlay.innerHTML = content;
+
+                modalOverlay.querySelector('.section-modal-close').addEventListener('click', hideSectionModal);
+                modalOverlay.querySelectorAll('.section-button').forEach(button => {
+                    if (!button.disabled) {
+                        button.addEventListener('click', () => {
+                            const sectionIndex = parseInt(button.dataset.section);
+                            startLesson(planet, sectionIndex);
+                        });
+                    }
+                });
+
+                modalOverlay.classList.add('visible');
+            }
+
+            function hideSectionModal() {
+                modalOverlay.classList.remove('visible');
+                if (currentView === 'home') {
+                    document.getElementById('home-prompt').style.opacity = 1;
+                }
+            }
+
+            document.getElementById('sign-out-btn').addEventListener('click', () => {
+                if (typeof firebase !== 'undefined' && firebase.auth) {
+                    firebase.auth().signOut().then(() => {
+                        console.log('User signed out successfully.');
+                        // Change this line to redirect
+                        window.location.href = '/index.html';
+                    }).catch((error) => {
+                        console.error('Sign out error:', error);
+                        alert('Error signing out. Please check the console.');
+                    });
+                } else {
+                    console.error('Firebase is not initialized. Cannot sign out.');
+                    alert("Simulating sign out. The page will now reload.");
+                    // Also change this line for consistency
+                    window.location.href = '/index.html';
+                }
+            });
+
+
+            document.querySelectorAll('.action-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const theme = button.dataset.theme;
+                    if (purchasedThemes.has(theme) || theme === 'default') {
+                        applyTheme(theme);
+                    } else { // Buy
+                        const cost = parseInt(button.dataset.cost);
+                        if (credits >= cost) {
+                            credits -= cost;
+                            purchasedThemes.add(theme);
+                            updateCreditDisplay();
+                            updateShopUI();
+                            applyTheme(theme); // Equip after buying
+                        }
+                    }
+                });
+            });
+
+            document.querySelectorAll('.demo-button').forEach(button => {
+                button.addEventListener('click', () => {
+                    const theme = button.dataset.theme;
+                    startDemo(theme);
+                });
+            });
+
+            document.querySelectorAll('.menu-item').forEach(item => item.addEventListener('click', (e) => switchView(e.target.dataset.view)));
+
+            document.getElementById('current-language-btn').addEventListener('click', () => {
+                document.getElementById('language-options').classList.toggle('visible');
+            });
+
+            document.getElementById('language-options').addEventListener('click', (e) => {
+                if (e.target.tagName === 'A') {
+                    const newLang = e.target.dataset.lang;
+                    switchLanguage(newLang);
+                    document.getElementById('language-options').classList.remove('visible');
+                }
+            });
+
+            window.addEventListener('lessonCompleted', (e) => {
+                const { planetName, sectionNumber, isWin, isAlreadyCompleted, correctCount, totalCount, learnedWords } = e.detail;
+
+                // Update Stats
+                if (correctCount !== undefined) {
+                    userStats.correctAnswers += correctCount;
+                    userStats.totalQuestions += totalCount;
+                }
+
+                if (learnedWords && learnedWords.length > 0) {
+                    // Use Set to ensure uniqueness in log
+                    const uniqueLog = new Set(userStats.learnedLog || []);
+                    learnedWords.forEach(word => uniqueLog.add(word));
+                    userStats.learnedLog = Array.from(uniqueLog);
+                    userStats.wordsLearned = uniqueLog.size;
+                } else if (isWin && !isAlreadyCompleted && (!learnedWords || learnedWords.length === 0)) {
+                    // Fallback if learnedWords not sent for some reason, but we shouldn't hit this with new React code
+                    // userStats.wordsLearned += 5; 
+                }
+
+                localStorage.setItem('arsha_userStats', JSON.stringify(userStats));
+                updateRightPanelStats();
+
+                if (isWin && !isAlreadyCompleted) {
+                    const currentLangProgress = languageProgress[currentLanguage];
+                    if (!currentLangProgress.completedSections[planetName]) {
+                        currentLangProgress.completedSections[planetName] = [];
+                    }
+                    if (!currentLangProgress.completedSections[planetName].includes(sectionNumber)) {
+                        currentLangProgress.completedSections[planetName].push(sectionNumber);
+                        const creditsEarned = (sectionNumber === 5) ? 100 : 50;
+                        credits += creditsEarned;
+                        updateCreditDisplay();
+
+                        // Increment total sections for rewards
+                        userStats.totalSectionsCompleted = (userStats.totalSectionsCompleted || 0) + 1;
+                        localStorage.setItem('arsha_userStats', JSON.stringify(userStats));
+                        updateRewardUI();
+                    }
+
+                    const currentPlanetIndex = planetUnlockOrder.indexOf(planetName);
+                    if ((currentLangProgress.completedSections[planetName]?.length || 0) === 5 && currentPlanetIndex < planetUnlockOrder.length - 1) {
+                        const nextPlanetName = planetUnlockOrder[currentPlanetIndex + 1];
+                        if (!currentLangProgress.unlockedPlanets.has(nextPlanetName)) {
+                            unlockPlanet(nextPlanetName);
+                        }
+                    }
+                }
+            });
+            window.addEventListener('endQuiz', () => {
+                const appContainer = document.getElementById('app-container');
+                appContainer.style.display = 'block';
+                setTimeout(() => { appContainer.style.opacity = '1'; }, 10);
+                zoomOut();
+            });
+
+            window.addEventListener('mousedown', onMouseDown);
+            window.addEventListener('mouseup', onMouseUp);
+            window.addEventListener('mousemove', onMouseMove);
+        }
+
+        init();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+        scene.background = new THREE.Color(0x000000);
+    </script>
+
+    <script type="text/babel">
+        const { useState, useEffect, useMemo, useRef } = React;
+
+        const vocabulary = {
+            Orange: {
+                es: {
+                    name: "Spanish", items: [
+                        [{ english: "the man", word: "el hombre" }, { english: "the woman", word: "la mujer" }, { english: "I am a man", word: "yo soy un hombre" }],
+                        [{ english: "the boy", word: "el niño" }, { english: "the girl", word: "la niña" }, { english: "I am a girl", word: "yo soy una niña" }, { english: "He is a boy", word: "él es un niño" }],
+                        [{ english: "Hello", word: "hola" }, { english: "Goodbye", word: "adiós" }, { english: "Thank you", word: "gracias" }, { english: "Good morning", word: "buenos días" }, { english: "Good night", word: "buenas noches" }],
+                        [{ english: "Yes", word: "sí" }, { english: "No", word: "no" }, { english: "Please", word: "por favor" }, { english: "You're welcome", word: "de nada" }, { english: "Excuse me", word: "perdón" }, { english: "I am sorry", word: "lo siento" }],
+                        [{ english: "You are a woman", word: "tú eres una mujer" }, { english: "She is a girl", word: "ella es una niña" }, { english: "He is a man", word: "él es un hombre" }, { english: "My name is", word: "me llamo" }, { english: "What is your name?", word: "cómo te llamas" }, { english: "Nice to meet you", word: "mucho gusto" }, { english: "How are you?", word: "cómo estás" }]
+                    ]
+                },
+                fr: {
+                    name: "French", items: [
+                        [{ english: "the man", word: "l'homme" }, { english: "the woman", word: "la femme" }, { english: "I am a man", word: "je suis un homme" }],
+                        [{ english: "the boy", word: "le garçon" }, { english: "the girl", word: "la fille" }, { english: "I am a girl", word: "je suis une fille" }, { english: "He is a boy", word: "il est un garçon" }],
+                        [{ english: "Hello", word: "bonjour" }, { english: "Goodbye", word: "au revoir" }, { english: "Thank you", word: "merci" }, { english: "Good morning", word: "bonjour" }, { english: "Good night", word: "bonne nuit" }],
+                        [{ english: "Yes", word: "oui" }, { english: "No", word: "non" }, { english: "Please", word: "s'il vous plaît" }, { english: "You're welcome", word: "de rien" }, { english: "Excuse me", word: "excusez-moi" }, { english: "I am sorry", word: "je suis désolé" }],
+                        [{ english: "You are a woman", word: "tu es une femme" }, { english: "She is a girl", word: "elle est une fille" }, { english: "My name is", word: "je m'appelle" }, { english: "What is your name?", word: "comment tu t'appelles" }, { english: "Nice to meet you", word: "enchanté" }, { english: "How are you?", word: "comment ça va" }]
+                    ]
+                },
+                hi: {
+                    name: "Hindi", items: [
+                        [{ english: "man", word: "आदमी" }, { english: "woman", word: "औरत" }, { english: "I am a man", word: "मैं एक आदमी हूँ" }],
+                        [{ english: "boy", word: "लड़का" }, { english: "girl", word: "लड़की" }, { english: "I am a girl", word: "मैं एक लड़की हूँ" }, { english: "He is a boy", word: "वह एक लड़का है" }],
+                        [{ english: "Hello", word: "नमस्ते" }, { english: "Goodbye", word: "अलविदा" }, { english: "Thank you", word: "धन्यवाद" }, { english: "Good morning", word: "सुप्रभात" }, { english: "Good night", word: "शुभ रात्रि" }],
+                        [{ english: "Yes", word: "हाँ" }, { english: "No", word: "नहीं" }, { english: "Please", word: "कृपया" }, { english: "You're welcome", word: "आपका स्वागत है" }, { english: "Excuse me", word: "माफ़ कीजिए" }, { english: "I am sorry", word: "मुझे अफ़सोस है" }],
+                        [{ english: "You are a woman", word: "तुम एक औरत हो" }, { english: "She is a girl", word: "वह एक लड़की है" }, { english: "My name is", word: "मेरा नाम है" }, { english: "What is your name?", word: "आपका नाम क्या है" }, { english: "How are you?", word: "आप कैसे हैं" }]
+                    ]
+                }
+            },
+            Green: {
+                es: {
+                    name: "Spanish", items: [
+                        [{ english: "apple", word: "manzana" }, { english: "bread", word: "pan" }, { english: "I eat bread", word: "yo como pan" }],
+                        [{ english: "water", word: "agua" }, { english: "milk", word: "leche" }, { english: "I drink milk", word: "yo bebo leche" }],
+                        [{ english: "the cheese", word: "el queso" }, { english: "the fruit", word: "la fruta" }, { english: "the pasta", word: "la pasta" }],
+                        [{ english: "the tomato", word: "el tomate" }, { english: "the juice", word: "el jugo" }, { english: "the egg", word: "el huevo" }],
+                        [{ english: "the fish", word: "el pescado" }, { english: "the chicken", word: "el pollo" }, { english: "the soup", word: "la sopa" }]
+                    ]
+                },
+                fr: {
+                    name: "French", items: [
+                        [{ english: "apple", word: "pomme" }, { english: "bread", word: "pain" }, { english: "I eat bread", word: "je mange du pain" }],
+                        [{ english: "water", word: "eau" }, { english: "milk", word: "lait" }, { english: "I drink milk", word: "je bois du lait" }],
+                        [{ english: "the cheese", word: "le fromage" }, { english: "the fruit", word: "le fruit" }, { english: "the pasta", word: "les pâtes" }],
+                        [{ english: "the tomato", word: "la tomate" }, { english: "the juice", word: "le jus" }, { english: "the egg", word: "l'œuf" }],
+                        [{ english: "the fish", word: "le poisson" }, { english: "the chicken", word: "le poulet" }, { english: "the soup", word: "la soupe" }]
+                    ]
+                },
+                hi: {
+                    name: "Hindi", items: [
+                        [{ english: "apple", word: "सेब" }, { english: "bread", word: "रोटी" }, { english: "I eat bread", word: "मैं रोटी खाता हूँ" }],
+                        [{ english: "water", word: "पानी" }, { english: "milk", word: "दूध" }, { english: "I drink milk", word: "मैं दूध पीता हूँ" }],
+                        [{ english: "the cheese", word: "पनीर" }, { english: "the fruit", word: "फल" }, { english: "the pasta", word: "पास्ता" }],
+                        [{ english: "the tomato", word: "टमाटर" }, { english: "the juice", word: "रस" }, { english: "the egg", word: "अंडा" }],
+                        [{ english: "the fish", word: "मछली" }, { english: "the chicken", word: "मुर्गा" }, { english: "the soup", word: "सूप" }]
+                    ]
+                }
+            },
+            Red: {
+                es: {
+                    name: "Spanish", items: [
+                        [{ english: "my", word: "mi" }, { english: "your", word: "tu" }, { english: "my cat", word: "mi gato" }],
+                        [{ english: "his", word: "su" }, { english: "her", word: "su" }, { english: "his dog", word: "su perro" }],
+                        [{ english: "our", word: "nuestro" }, { english: "their", word: "su" }, { english: "our car", word: "nuestro coche" }],
+                        [{ english: "friend", word: "amigo" }, { english: "book", word: "libro" }, { english: "my friend's book", word: "el libro de mi amigo" }],
+                        [{ english: "the house", word: "la casa" }, { english: "the school", word: "la escuela" }, { english: "your school", word: "tu escuela" }]
+                    ]
+                },
+                fr: {
+                    name: "French", items: [
+                        [{ english: "my", word: "mon" }, { english: "your", word: "ton" }, { english: "my cat", word: "mon chat" }],
+                        [{ english: "his", word: "son" }, { english: "her", word: "sa" }, { english: "his dog", word: "son chien" }],
+                        [{ english: "our", word: "notre" }, { english: "their", word: "leur" }, { english: "our car", word: "notre voiture" }],
+                        [{ english: "friend", word: "ami" }, { english: "book", word: "livre" }, { english: "my friend's book", word: "le livre de mon ami" }],
+                        [{ english: "the house", word: "la maison" }, { english: "the school", word: "l'école" }, { english: "your school", word: "ton école" }]
+                    ]
+                },
+                hi: {
+                    name: "Hindi", items: [
+                        [{ english: "my", word: "मेरा" }, { english: "your", word: "तुम्हारा" }, { english: "my cat", word: "मेरी बिल्ली" }],
+                        [{ english: "his", word: "उसका" }, { english: "her", word: "उसकी" }, { english: "his dog", word: "उसका कुत्ता" }],
+                        [{ english: "our", word: "हमारा" }, { english: "their", word: "उनका" }, { english: "our car", word: "हमारी गाड़ी" }],
+                        [{ english: "friend", word: "दोस्त" }, { english: "book", word: "किताब" }, { english: "my friend's book", word: "मेरे दोस्त की किताब" }],
+                        [{ english: "the house", word: "घर" }, { english: "the school", word: "स्कूल" }, { english: "your school", word: "तुम्हारा स्कूल" }]
+                    ]
+                }
+            },
+            Pink: {
+                es: {
+                    name: "Spanish", items: [
+                        [{ english: "where?", word: "dónde" }, { english: "is", word: "está" }, { english: "Where is the bathroom?", word: "dónde está el baño" }],
+                        [{ english: "here", word: "aquí" }, { english: "there", word: "allí" }, { english: "The book is here", word: "el libro está aquí" }],
+                        [{ english: "left", word: "izquierda" }, { english: "right", word: "derecha" }, { english: "Turn right", word: "gira a la derecha" }],
+                        [{ english: "straight", word: "recto" }, { english: "near", word: "cerca" }, { english: "The park is near", word: "el parque está cerca" }],
+                        [{ english: "far", word: "lejos" }, { english: "street", word: "calle" }, { english: "The school is far", word: "la escuela está lejos" }]
+                    ]
+                },
+                fr: {
+                    name: "French", items: [
+                        [{ english: "where?", word: "où" }, { english: "is", word: "est" }, { english: "Where is the bathroom?", word: "où sont les toilettes" }],
+                        [{ english: "here", word: "ici" }, { english: "there", word: "là" }, { english: "The book is here", word: "le livre est ici" }],
+                        [{ english: "left", word: "gauche" }, { english: "right", word: "droite" }, { english: "Turn right", word: "tournez à droite" }],
+                        [{ english: "straight", word: "tout droit" }, { english: "near", word: "près" }, { english: "The park is near", word: "le parc est près" }],
+                        [{ english: "far", word: "loin" }, { english: "street", word: "rue" }, { english: "The school is far", word: "l'école est loin" }]
+                    ]
+                },
+                hi: {
+                    name: "Hindi", items: [
+                        [{ english: "where?", word: "कहाँ" }, { english: "is", word: "है" }, { english: "Where is the bathroom?", word: "शौचालय कहाँ है" }],
+                        [{ english: "here", word: "यहाँ" }, { english: "there", word: "वहाँ" }, { english: "The book is here", word: "किताब यहाँ है" }],
+                        [{ english: "left", word: "बाएँ" }, { english: "right", word: "दाएँ" }, { english: "Turn right", word: "दाएँ मुड़ें" }],
+                        [{ english: "straight", word: "सीधा" }, { english: "near", word: "पास" }, { english: "The park is near", word: "पार्क पास है" }],
+                        [{ english: "far", word: "दूर" }, { english: "street", word: "सड़क" }, { english: "The school is far", word: "स्कूल दूर है" }]
+                    ]
+                }
+            },
+            Blue: {
+                es: {
+                    name: "Spanish", items: [
+                        [{ english: "big", word: "grande" }, { english: "small", word: "pequeño" }, { english: "the big house", word: "la casa grande" }],
+                        [{ english: "red", word: "rojo" }, { english: "blue", word: "azul" }, { english: "the red car", word: "el coche rojo" }],
+                        [{ english: "happy", word: "feliz" }, { english: "sad", word: "triste" }, { english: "the sad boy", word: "el niño triste" }],
+                        [{ english: "good", word: "bueno" }, { english: "bad", word: "malo" }, { english: "the good dog", word: "el perro bueno" }],
+                        [{ english: "tall", word: "alto" }, { english: "short", word: "bajo" }, { english: "the tall woman", word: "la mujer alta" }]
+                    ]
+                },
+                fr: {
+                    name: "French", items: [
+                        [{ english: "big", word: "grand" }, { english: "small", word: "petit" }, { english: "the big house", word: "la grande maison" }],
+                        [{ english: "red", word: "rouge" }, { english: "blue", word: "bleu" }, { english: "the red car", word: "la voiture rouge" }],
+                        [{ english: "happy", word: "heureux" }, { english: "sad", word: "triste" }, { english: "the sad boy", word: "le garçon triste" }],
+                        [{ english: "good", word: "bon" }, { english: "bad", word: "mauvais" }, { english: "the good dog", word: "le bon chien" }],
+                        [{ english: "tall", word: "grand" }, { english: "short", word: "petit" }, { english: "the tall woman", word: "la femme grande" }]
+                    ]
+                },
+                hi: {
+                    name: "Hindi", items: [
+                        [{ english: "big", word: "बड़ा" }, { english: "small", word: "छोटा" }, { english: "the big house", word: "बड़ा घर" }],
+                        [{ english: "red", word: "लाल" }, { english: "blue", word: "नीला" }, { english: "the red car", word: "लाल गाड़ी" }],
+                        [{ english: "happy", word: "खुश" }, { english: "sad", word: "दुखी" }, { english: "the sad boy", word: "दुखी लड़का" }],
+                        [{ english: "good", word: "अच्छा" }, { english: "bad", word: "बुरा" }, { english: "the good dog", word: "अच्छा कुत्ता" }],
+                        [{ english: "tall", word: "लंबा" }, { english: "short", word: "छोटा" }, { english: "the tall woman", word: "लंबी औरत" }]
+                    ]
+                }
+            },
+            Purple: {
+                es: {
+                    name: "Spanish", items: [
+                        [{ english: "and", word: "y" }, { english: "but", word: "pero" }, { english: "I eat apples and oranges", word: "como manzanas y naranjas" }],
+                        [{ english: "or", word: "o" }, { english: "because", word: "porque" }, { english: "water or milk?", word: "agua o leche" }],
+                        [{ english: "if", word: "si" }, { english: "when", word: "cuando" }, { english: "if you want", word: "si quieres" }],
+                        [{ english: "that", word: "que" }, { english: "with", word: "con" }, { english: "I think that", word: "pienso que" }],
+                        [{ english: "for", word: "para" }, { english: "in", word: "en" }, { english: "this is for you", word: "esto es para ti" }]
+                    ]
+                },
+                fr: {
+                    name: "French", items: [
+                        [{ english: "and", word: "et" }, { english: "but", word: "mais" }, { english: "I eat apples and oranges", word: "je mange des pommes et des oranges" }],
+                        [{ english: "or", word: "ou" }, { english: "because", word: "parce que" }, { english: "water or milk?", word: "de l'eau ou du lait" }],
+                        [{ english: "if", word: "si" }, { english: "when", word: "quand" }, { english: "if you want", word: "si tu veux" }],
+                        [{ english: "that", word: "que" }, { english: "with", word: "avec" }, { english: "I think that", word: "je pense que" }],
+                        [{ english: "for", word: "pour" }, { english: "in", word: "dans" }, { english: "this is for you", word: "c'est pour toi" }]
+                    ]
+                },
+                hi: {
+                    name: "Hindi", items: [
+                        [{ english: "and", word: "और" }, { english: "but", word: "लेकिन" }, { english: "I eat apples and oranges", word: "मैं सेब और संतरे खाता हूँ" }],
+                        [{ english: "or", word: "या" }, { english: "because", word: "क्योंकि" }, { english: "water or milk?", word: "पानी या दूध" }],
+                        [{ english: "if", word: "अगर" }, { english: "when", word: "जब" }, { english: "if you want", word: "अगर तुम चाहो" }],
+                        [{ english: "that", word: "कि" }, { english: "with", word: "साथ" }, { english: "I think that", word: "मुझे लगता है कि" }],
+                        [{ english: "for", word: "लिए" }, { english: "in", word: "में" }, { english: "this is for you", word: "यह तुम्हारे लिए है" }]
+                    ]
+                }
+            }
+        };
+
+        const langCodes = { es: 'es-ES', fr: 'fr-FR', hi: 'hi-IN' };
+
+        const victoryMessages = ["Awesome!", "Stellar performance!", "You're a star!", "Out of this world!"];
+        const lossMessages = ["Almost there!", "A valiant effort. Try again?", "You can do better next time!", "Don't give up! The cosmos awaits."];
+
+        function QuizApp() {
+            const [isVisible, setIsVisible] = useState(false);
+            const [theme, setTheme] = useState({ color: '#000', planetName: 'Space', lang: 'es' });
+            const [isExiting, setIsExiting] = useState(false);
+            const [lessonSteps, setLessonSteps] = useState([]);
+            const [currentStepIndex, setCurrentStepIndex] = useState(0);
+            const [score, setScore] = useState(0);
+            const [quizFinished, setQuizFinished] = useState(false);
+            const [answerStatus, setAnswerStatus] = useState(null);
+            const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+            const [isAlreadyCompleted, setIsAlreadyCompleted] = useState(false);
+
+            const [isRecording, setIsRecording] = useState(false);
+            const [userAnswer, setUserAnswer] = useState('');
+            const [liveTranscript, setLiveTranscript] = useState('');
+            const [feedback, setFeedback] = useState('');
+            const [answerSubmitted, setAnswerSubmitted] = useState(false);
+
+            const [strikes, setStrikes] = useState(0);
+            const [animationSrc, setAnimationSrc] = useState('talk.json');
+            const [startTime, setStartTime] = useState(null);
+            const [lessonDuration, setLessonDuration] = useState(null);
+            const [showLeaveWarning, setShowLeaveWarning] = useState(false);
+            const [learnedInLesson, setLearnedInLesson] = useState(new Set());
+
+            const recognition = useRef(null);
+            const lottiePlayerRef = useRef(null);
+
+            useEffect(() => {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (SpeechRecognition) {
+                    recognition.current = new SpeechRecognition();
+                    recognition.current.continuous = false;
+                    recognition.current.interimResults = true;
+                    recognition.current.maxAlternatives = 1;
+                    recognition.current.onstart = () => { setIsRecording(true); setLiveTranscript(''); setUserAnswer(''); };
+                    recognition.current.onresult = (event) => {
+                        let transcript = Array.from(event.results).map(result => result[0].transcript).join('');
+                        setLiveTranscript(transcript);
+                        setUserAnswer(transcript.toLowerCase().trim().replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, ""));
+
+                        if (event.results[event.results.length - 1].isFinal) {
+                            recognition.current.stop();
+                        }
+                    };
+                    recognition.current.onend = () => setIsRecording(false);
+                    recognition.current.onerror = (event) => {
+                        console.error("Speech recognition error", event.error);
+                        setFeedback(event.error === 'no-speech' ? "I didn't hear anything." : `Error: ${event.error}.`);
+                        setIsRecording(false);
+                    };
+                }
+            }, []);
+
+            useEffect(() => {
+                if (lottiePlayerRef.current) { lottiePlayerRef.current.load(animationSrc); }
+            }, [animationSrc]);
+
+            const setupQuiz = (details) => {
+                const { lang, planetName, sectionIndex, color, isAlreadyCompleted } = details;
+                setTheme({ lang, planetName, color });
+                setStartTime(Date.now());
+                setCurrentSectionIndex(sectionIndex);
+                setIsAlreadyCompleted(isAlreadyCompleted);
+
+                const lessonVocab = vocabulary[planetName]?.[lang]?.items?.[sectionIndex] || [];
+                const steps = [];
+                lessonVocab.forEach(item => {
+                    steps.push({ type: 'learn', ...item });
+                    steps.push({ type: 'practice', question: `How do you say "${item.english}"?`, correctAnswer: item.word, ...item });
+                });
+
+                setLessonSteps(steps);
+                setCurrentStepIndex(0);
+                setScore(0);
+                setStrikes(0);
+                setQuizFinished(false);
+                setLearnedInLesson(new Set());
+                handleTryAgain();
+                setAnimationSrc('talk.json');
+
+                if (recognition.current) recognition.current.lang = langCodes[lang];
+                setIsVisible(true);
+                setShowLeaveWarning(false);
+                document.getElementById('react-root').style.display = 'flex';
+            };
+
+            const handleStartQuiz = (event) => {
+                setupQuiz(event.detail);
+            };
+
+            const restartQuiz = () => {
+                setupQuiz({ ...theme, sectionIndex: currentSectionIndex, isAlreadyCompleted });
+            };
+
+            useEffect(() => {
+                window.addEventListener('startQuiz', handleStartQuiz);
+                return () => window.removeEventListener('startQuiz', handleStartQuiz);
+            }, []);
+
+            useEffect(() => { if (strikes >= 3) { setQuizFinished(true); } }, [strikes]);
+
+            useEffect(() => {
+                if (quizFinished) {
+                    setLessonDuration(Date.now() - startTime);
+                    const isWin = strikes === 0;
+                    const victoryAnims = ['victory1.json', 'victory2.json', 'victory3.json'];
+                    const lossAnims = ['loss1.json', 'loss2.json', 'loss3.json'];
+                    setAnimationSrc(isWin ? victoryAnims[Math.floor(Math.random() * victoryAnims.length)] : lossAnims[Math.floor(Math.random() * lossAnims.length)]);
+
+                    const totalQuestions = lessonSteps.filter(step => step.type === 'practice').length;
+                    window.dispatchEvent(new CustomEvent('lessonCompleted', {
+                        detail: {
+                            planetName: theme.planetName,
+                            sectionNumber: currentSectionIndex + 1,
+                            isWin,
+                            isAlreadyCompleted,
+                            isAlreadyCompleted,
+                            correctCount: score,
+                            totalCount: totalQuestions,
+                            learnedWords: Array.from(learnedInLesson)
+                        }
+                    }));
+                }
+            }, [quizFinished]);
+
+            const handleBackClick = () => {
+                setIsExiting(true);
+                setTimeout(() => {
+                    setIsVisible(false);
+                    document.getElementById('react-root').style.display = 'none';
+                    window.dispatchEvent(new CustomEvent('endQuiz'));
+                    setIsExiting(false);
+                }, 500);
+            };
+
+            const handleLeaveClick = () => setShowLeaveWarning(true);
+            const handleCancelLeave = () => setShowLeaveWarning(false);
+            const handleConfirmLeave = () => { setShowLeaveWarning(false); handleBackClick(); };
+
+            const handleTryAgain = () => {
+                setUserAnswer('');
+                setFeedback('');
+                setLiveTranscript('');
+                setAnswerSubmitted(false);
+                setAnswerStatus(null);
+            };
+
+            const handleNextStep = () => {
+                handleTryAgain();
+                const nextIndex = currentStepIndex + 1;
+                if (nextIndex >= lessonSteps.length) {
+                    setQuizFinished(true);
+                } else {
+                    setCurrentStepIndex(nextIndex);
+                }
+            };
+
+            const handleSubmitAnswer = () => {
+                const currentStep = lessonSteps[currentStepIndex];
+                if (currentStep.type === 'learn') { handleNextStep(); return; }
+                if (userAnswer === '') return;
+                setAnswerSubmitted(true);
+
+                const isCorrect = userAnswer === currentStep.correctAnswer;
+                if (isCorrect) {
+                    setFeedback(`CORRECT!`);
+                    setScore(prev => prev + 1);
+                    setAnswerStatus('correct');
+                    setLearnedInLesson(prev => new Set(prev).add(currentStep.word));
+                } else {
+                    setFeedback(`Not quite. The answer is "${currentStep.correctAnswer}".`);
+                    setAnswerStatus('incorrect');
+                    setStrikes(prev => prev + 1);
+                }
+            };
+
+            const toggleRecording = () => {
+                if (!recognition.current) { setFeedback("Speech recognition not supported."); return; }
+                if (isRecording) { recognition.current.stop(); } else { recognition.current.start(); }
+            };
+
+            const handleSpeak = (text) => {
+                if ('speechSynthesis' in window) {
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = langCodes[theme.lang];
+                    window.speechSynthesis.speak(utterance);
+                }
+            };
+
+            if (!isVisible) return null;
+
+            const currentStep = lessonSteps[currentStepIndex];
+            const totalPracticeSteps = lessonSteps.filter(step => step.type === 'practice').length;
+            const practiceStepsCompleted = Math.floor(currentStepIndex / 2);
+            const progress = quizFinished && strikes === 0 ? 100 : (totalPracticeSteps > 0 ? (practiceStepsCompleted / totalPracticeSteps) * 100 : 0);
+
+            const renderQuizContent = () => {
+                if (!currentStep || quizFinished) {
+                    const isWin = strikes === 0;
+                    const resultMessage = isWin ? victoryMessages[Math.floor(Math.random() * victoryMessages.length)] : lossMessages[Math.floor(Math.random() * lossMessages.length)];
+                    const creditsEarned = currentSectionIndex === 4 ? 100 : 50;
+                    return (
+                        <div className="quiz-results" style={{ textAlign: 'center', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                            <div className="character-container" style={{ width: '250px', height: '250px', margin: '0 auto' }}>
+                                <lottie-player ref={lottiePlayerRef} src={animationSrc} background="transparent" speed="1" loop autoplay></lottie-player>
+                            </div>
+                            <div className="quiz-results-box">
+                                <h2>{resultMessage}</h2>
+                                {isWin && <p>You got {score} out of {totalPracticeSteps} correct!</p>}
+                                {isWin && !isAlreadyCompleted && (
+                                    <p style={{ color: '#ffd700', fontWeight: 'bold' }}>+{creditsEarned} Credits Earned!</p>
+                                )}
+                                {!isWin && <p>You must get all questions correct to pass.</p>}
+                            </div>
+                            {isWin ? (
+                                <button className="check-button" onClick={handleBackClick} style={{ marginTop: '20px', width: 'auto', padding: '15px 30px' }}>Return to Map</button>
+                            ) : (
+                                <button className="check-button" onClick={restartQuiz} style={{ marginTop: '20px', width: 'auto', padding: '15px 30px', backgroundColor: '#007bff', borderBottomColor: '#0056b3' }}>Try Again</button>
+                            )}
+                        </div>
+                    );
+                }
+
+                const questionsRemaining = totalPracticeSteps - practiceStepsCompleted;
+
+                return (
+                    <React.Fragment>
+                        <div className="quiz-body">
+                            <div className="character-container">
+                                <lottie-player ref={lottiePlayerRef} src={animationSrc} background="transparent" speed="1" style={{ width: '300px', height: '300px' }} loop autoplay></lottie-player>
+                            </div>
+                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                {currentStep.type === 'learn' ? (
+                                    <div className="learning-card">
+                                        <div className="number">{currentStep.english}</div>
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '15px' }}>
+                                            <div className="word">{currentStep.word}</div>
+                                            <button onClick={() => handleSpeak(currentStep.word)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#555', padding: 0 }}>
+                                                <svg width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path></svg>
+                                            </button>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <React.Fragment>
+                                        <div className="quiz-question">{currentStep.question}</div>
+                                        <div className="quiz-feedback-container">
+                                            <div className="quiz-feedback-box">
+                                                {userAnswer || liveTranscript || 'Click the mic to speak...'}
+                                            </div>
+                                            <button onClick={toggleRecording} className={`mic-button ${isRecording ? 'recording' : ''}`} disabled={answerSubmitted}>
+                                                <svg width="28" height="28" viewBox="0 0 24 24"><path fill="currentColor" d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.49 6-3.31 6-6.72h-1.7z"></path></svg>
+                                            </button>
+                                        </div>
+                                        <p style={{ textAlign: 'center', marginTop: '10px', opacity: 0.8 }}>{questionsRemaining} question{questionsRemaining !== 1 ? 's' : ''} remaining</p>
+                                    </React.Fragment>
+                                )}
+                            </div>
+                        </div>
+                    </React.Fragment>
+                );
+            };
+
+            return (
+                <div className="quiz-container" style={{ backgroundColor: theme.color }}>
+                    <div className="quiz-header">
+                        <button className="leave-button" onClick={handleLeaveClick}>LEAVE</button>
+                        <div className="progress-bar"><div className="progress-bar-inner" style={{ width: `${progress}%` }}></div></div>
+                        <div className="strikes-container">
+                            {[...Array(3)].map((_, i) => (
+                                <span key={i} className={`strike ${i < strikes ? 'lost' : ''}`}>❤️</span>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="quiz-main">{renderQuizContent()}</div>
+                    <div className="quiz-footer">
+                        {!quizFinished && (
+                            answerSubmitted ? (
+                                <div className="quiz-actions"><button className="check-button" onClick={handleNextStep}>Continue</button></div>
+                            ) : (
+                                <div className="quiz-actions">
+                                    {currentStep && currentStep.type === 'practice' && (
+                                        <button className="check-button try-again-button" onClick={toggleRecording} disabled={isRecording}>Re-record</button>
+                                    )}
+                                    <button className="check-button" onClick={handleSubmitAnswer} disabled={currentStep && currentStep.type === 'practice' && (!userAnswer || isRecording)}>
+                                        {currentStep && currentStep.type === 'learn' ? 'Continue' : 'Check'}
+                                    </button>
+                                </div>
+                            )
+                        )}
+                    </div>
+                    <div className={`result-banner ${answerStatus} ${answerSubmitted ? 'visible' : ''}`}>{feedback}</div>
+                    {showLeaveWarning && (
+                        <div className="quiz-warning-overlay animate__animated animate__fadeIn">
+                            <div className="quiz-warning-modal animate__animated animate__zoomIn">
+                                <h3>Are you sure?</h3>
+                                <p>All progress in this lesson will be lost.</p>
+                                <div className="quiz-warning-actions">
+                                    <button className="cancel-leave-btn" onClick={handleCancelLeave}>Stay</button>
+                                    <button className="confirm-leave-btn" onClick={handleConfirmLeave}>Leave</button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        ReactDOM.render(<QuizApp />, document.getElementById('react-root'));
+    </script>
+
+    <script>
+        const practiceGameVocab = {
+            es: {
+                'hola': 'hello', 'adiós': 'goodbye', 'gracias': 'thank you', 'por favor': 'please', 'sí': 'yes',
+                'no': 'no', 'agua': 'water', 'comida': 'food', 'amigo': 'friend', 'casa': 'house',
+                'gato': 'cat', 'perro': 'dog', 'libro': 'book', 'sol': 'sun', 'luna': 'moon',
+                'escuela': 'school', 'maestro': 'teacher', 'estudiante': 'student', 'rojo': 'red',
+                'azul': 'blue', 'verde': 'green', 'amarillo': 'yellow', 'naranja': 'orange',
+                'blanco': 'white', 'negro': 'black', 'grande': 'big', 'pequeño': 'small',
+                'feliz': 'happy', 'triste': 'sad', 'caliente': 'hot', 'frío': 'cold'
+            },
+            fr: {
+                'bonjour': 'hello', 'au revoir': 'goodbye', 'merci': 'thank you', 's\'il vous plaît': 'please',
+                'oui': 'yes', 'non': 'no', 'eau': 'water', 'nourriture': 'food', 'ami': 'friend',
+                'maison': 'house', 'chat': 'cat', 'chien': 'dog', 'livre': 'book', 'soleil': 'sun',
+                'lune': 'moon', 'école': 'school', 'professeur': 'teacher', 'étudiant': 'student',
+                'rouge': 'red', 'bleu': 'blue', 'vert': 'green', 'jaune': 'yellow'
+            },
+            hi: {
+                'नमस्ते': 'hello', 'अलविदा': 'goodbye', 'धन्यवाद': 'thank you', 'कृपया': 'please',
+                'हाँ': 'yes', 'नहीं': 'no', 'पानी': 'water', 'खाना': 'food', 'दोस्त': 'friend',
+                'घर': 'house', 'बिल्ली': 'cat', 'कुत्ता': 'dog', 'किताब': 'book', 'सूरज': 'sun',
+                'चाँद': 'moon', 'स्कूल': 'school', 'अध्यापक': 'teacher', 'छात्र': 'student',
+                'लाल': 'red', 'नीला': 'blue', 'हरा': 'green', 'पीला': 'yellow'
+            }
+        };
+
+        let gameScene, gameCamera, gameRenderer, gameLabelRenderer;
+        let asteroids, score, lives, gameActive, gameLoopId;
+        let isPracticeGameInitialized = false;
+        let handleGameResize;
+        let missedWords = {};
+
+        function initPracticeGame() {
+            if (isPracticeGameInitialized) return;
+            isPracticeGameInitialized = true;
+
+            const container = document.getElementById('practice-game-canvas-container');
+            if (!container) return;
+
+            gameScene = new THREE.Scene();
+            gameScene.background = new THREE.Color(0x000000);
+            gameCamera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+            gameCamera.position.z = 10;
+
+            gameRenderer = new THREE.WebGLRenderer({ antialias: true });
+            gameRenderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(gameRenderer.domElement);
+
+            gameLabelRenderer = new THREE.CSS2DRenderer();
+            gameLabelRenderer.setSize(container.clientWidth, container.clientHeight);
+            gameLabelRenderer.domElement.classList.add('label-renderer');
+            container.appendChild(gameLabelRenderer.domElement);
+
+            const gameLight = new THREE.AmbientLight(0xffffff, 1);
+            gameScene.add(gameLight);
+
+            const starVertices = [];
+            for (let i = 0; i < 5000; i++) starVertices.push(THREE.MathUtils.randFloatSpread(500), THREE.MathUtils.randFloatSpread(500), THREE.MathUtils.randFloatSpread(500));
+            const starGeometry = new THREE.BufferGeometry();
+            starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+            const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.3 });
+            const stars = new THREE.Points(starGeometry, starMaterial);
+            gameScene.add(stars);
+
+            handleGameResize = () => {
+                const container = document.getElementById('practice-game-canvas-container');
+                if (!container) return;
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+                if (width === 0 || height === 0) return;
+                gameCamera.aspect = width / height;
+                gameCamera.updateProjectionMatrix();
+                gameRenderer.setSize(width, height);
+                gameLabelRenderer.setSize(width, height);
+            };
+
+            window.addEventListener('resize', handleGameResize);
+            document.getElementById('translation-input').addEventListener('keyup', handleInput);
+        }
+
+        function startPracticeGame() {
+            document.getElementById('game-over-screen').style.display = 'none';
+            document.getElementById('game-area').style.display = 'flex';
+
+            setTimeout(() => {
+                if (handleGameResize) { handleGameResize(); }
+
+                const input = document.getElementById('translation-input');
+                input.disabled = false;
+                input.value = '';
+                input.focus();
+
+                if (asteroids && asteroids.length > 0) { asteroids.forEach(a => removeAsteroidFromScene(a)); }
+                asteroids = [];
+                score = 0;
+                lives = 3;
+                gameActive = true;
+                missedWords = {};
+
+                updateStats();
+
+                if (gameLoopId) cancelAnimationFrame(gameLoopId);
+                gameLoop();
+            }, 50);
+        }
+
+        function stopPracticeGame() {
+            gameActive = false;
+            if (gameLoopId) { cancelAnimationFrame(gameLoopId); gameLoopId = null; }
+            if (asteroids && asteroids.length > 0) { asteroids.forEach(a => removeAsteroidFromScene(a)); }
+            asteroids = [];
+            document.getElementById('game-area').style.display = 'none';
+        }
+
+        function updateStats() {
+            document.getElementById('score').textContent = score;
+            const livesContainer = document.getElementById('lives-container');
+            if (livesContainer) {
+                livesContainer.innerHTML = Array(lives).fill('<span>❤️</span>').join('');
+            }
+        }
+
+        function gameLoop() {
+            if (!gameActive) return;
+            updateAsteroids();
+            TWEEN.update();
+            gameRenderer.render(gameScene, gameCamera);
+            gameLabelRenderer.render(gameScene, gameCamera);
+            gameLoopId = requestAnimationFrame(gameLoop);
+        }
+
+        let lastSpawn = 0;
+        function updateAsteroids() {
+            if (Date.now() - lastSpawn > Math.max(1500, 4000 - (score * 25))) {
+                spawnAsteroid();
+                lastSpawn = Date.now();
+            }
+
+            for (let i = asteroids.length - 1; i >= 0; i--) {
+                const asteroid = asteroids[i];
+                const speedBonus = Math.floor(score / 200) * 0.01;
+                asteroid.position.z += asteroid.userData.speed + speedBonus;
+                asteroid.rotation.x += 0.01;
+                asteroid.rotation.y += 0.01;
+
+                if (asteroid.position.z > gameCamera.position.z - 2) {
+                    const missedAsteroid = asteroids.splice(i, 1)[0];
+                    const missedWordData = missedAsteroid.userData;
+                    const wordList = practiceGameVocab[currentLanguage] || practiceGameVocab['es'];
+                    if (!missedWords[missedWordData.word]) { missedWords[missedWordData.word] = wordList[missedWordData.word]; }
+                    removeAsteroidFromScene(missedAsteroid);
+                    lives--;
+
+                    const damageOverlay = document.getElementById('damage-overlay');
+                    if (damageOverlay) {
+                        damageOverlay.classList.add('flash');
+                        setTimeout(() => damageOverlay.classList.remove('flash'), 500);
+                    }
+
+                    updateStats();
+                    if (lives <= 0) { endGame(); }
+                }
+            }
+        }
+
+        function spawnAsteroid() {
+            if (!gameActive) return;
+            const wordList = practiceGameVocab[currentLanguage] || practiceGameVocab['es'];
+            const foreignWords = Object.keys(wordList);
+            const word = foreignWords[Math.floor(Math.random() * foreignWords.length)];
+            const speed = Math.random() * 0.05 + 0.05;
+
+            const geometry = new THREE.IcosahedronGeometry(Math.random() * 2 + 1.0, 0);
+            const material = new THREE.MeshStandardMaterial({
+                color: `hsl(${Math.random() * 360}, 80%, 60%)`,
+                flatShading: true,
+                transparent: true,
+                opacity: 0
+            });
+            const asteroid = new THREE.Mesh(geometry, material);
+
+            const textDiv = document.createElement('div');
+            textDiv.className = 'asteroid-label';
+            textDiv.textContent = word;
+            textDiv.style.opacity = 0;
+            const label = new THREE.CSS2DObject(textDiv);
+            label.position.set(0, 0, 0);
+            asteroid.add(label);
+
+            const height = 2 * Math.tan(THREE.MathUtils.degToRad(gameCamera.fov) / 2) * 150;
+            const width = height * gameCamera.aspect;
+            asteroid.position.set(
+                THREE.MathUtils.randFloat(-width / 3.5, width / 3.5),
+                THREE.MathUtils.randFloat(-height / 3.5, height / 3.5),
+                -150
+            );
+
+            asteroid.userData = { word, speed: Math.min(speed, 0.4) };
+            asteroids.push(asteroid);
+            gameScene.add(asteroid);
+
+            new TWEEN.Tween(material)
+                .to({ opacity: 1 }, 500)
+                .start();
+
+            new TWEEN.Tween({ opacity: 0 })
+                .to({ opacity: 1 }, 500)
+                .onUpdate(function () {
+                    label.element.style.opacity = this._object.opacity;
+                })
+                .start();
+        }
+
+        function removeAsteroidFromScene(asteroid) {
+            if (!asteroid) return;
+            if (asteroid.geometry) asteroid.geometry.dispose();
+            if (asteroid.material) asteroid.material.dispose();
+            asteroid.traverse(child => {
+                if (child.isCSS2DObject && child.element.parentNode) {
+                    child.element.parentNode.removeChild(child.element);
+                }
+            });
+            if (asteroid.parent) asteroid.parent.remove(asteroid);
+        }
+
+        function handleInput(e) {
+            if (e.key !== 'Enter' || !gameActive) return;
+            const input = e.target;
+            const guess = input.value.trim().toLowerCase();
+            const wordList = practiceGameVocab[currentLanguage] || practiceGameVocab['es'];
+            let correct = false;
+
+            for (let i = asteroids.length - 1; i >= 0; i--) {
+                const asteroid = asteroids[i];
+                if (wordList[asteroid.userData.word] === guess) {
+                    const asteroidToDestroy = asteroids.splice(i, 1)[0];
+                    new TWEEN.Tween(asteroidToDestroy.scale)
+                        .to({ x: 3, y: 3, z: 3 }, 200)
+                        .chain(new TWEEN.Tween(asteroidToDestroy.scale).to({ x: 0.01, y: 0.01, z: 0.01 }, 100))
+                        .onComplete(() => removeAsteroidFromScene(asteroidToDestroy)).start();
+                    score += 10;
+                    updateStats();
+                    correct = true;
+                }
+            }
+
+            input.style.transition = 'none';
+            input.style.backgroundColor = correct ? 'rgba(40, 167, 69, 0.5)' : 'rgba(220, 53, 69, 0.5)';
+            setTimeout(() => {
+                input.style.transition = 'background-color 0.5s';
+                input.style.backgroundColor = 'rgba(0,0,0,0.5)';
+            }, 200);
+            input.value = '';
+        }
+
+        function endGame() {
+            gameActive = false;
+            cancelAnimationFrame(gameLoopId);
+            gameLoopId = null;
+            document.getElementById('final-score').textContent = score;
+
+            const missedWordsList = document.getElementById('missed-words-list');
+            const words = Object.keys(missedWords);
+            if (words.length > 0) {
+                let listHTML = '<h4>Words to Review</h4><ul>';
+                words.forEach(word => listHTML += `<li><strong>${word}</strong>: ${missedWords[word]}</li>`);
+                listHTML += '</ul>';
+                missedWordsList.innerHTML = listHTML;
+            } else {
+                missedWordsList.innerHTML = '<p>Great job! You didn\'t miss any words.</p>';
+            }
+
+            document.getElementById('game-over-screen').style.display = 'flex';
+            document.getElementById('translation-input').disabled = true;
+        }
+    </script>
+    <script type="module">
+        // Import the functions you need from the SDKs
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"; // <-- Make sure signOut is imported!
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCFdXSqHNQD9bNJtumCto8s7iyW035fT5o",
+            authDomain: "spango-9cc50.firebaseapp.com",
+            projectId: "spango-9cc50",
+            storageBucket: "spango-9cc50.appspot.com",
+            messagingSenderId: "337212261865",
+            appId: "1:337212261865:web:518b47905ef8a313bd3778",
+            measurementId: "G-4SM6KRZB7N"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // ✅ CORRECTED SIGN-OUT CODE
+        document.getElementById('sign-out-btn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                // Sign-out successful.
+                console.log('User signed out successfully.');
+                window.location.href = '/index.html'; // Redirect to sign-in page
+            }).catch((error) => {
+                // An error happened.
+                console.error('Sign out error:', error);
+                alert('Error signing out.');
+            });
+        });
+    </script>
 </body>
 
 </html>
