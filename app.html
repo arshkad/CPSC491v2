@@ -1729,48 +1729,67 @@
         let languageProgress = {};
 
         // Stats Variables
-        const storedStats = localStorage.getItem('arsha_userStats');
+        // Stats Variables
         const todayStr = new Date().toDateString();
+        window.userStats = null;
+        window.statsKey = null;
 
-        let userStats = storedStats ? JSON.parse(storedStats) : {
-            streak: 1,
-            lastLogin: todayStr,
-            correctAnswers: 0,
-            totalQuestions: 0,
-            learnedLog: [], // Store unique identifiers of words/phrases learned
-            totalSectionsCompleted: 0, // NEW: Track total cumulative sections for rewards
-            rewardsClaimed: 0 // NEW: Track how many sets of 5 have been claimed
-        };
+        // USER SESSION CHECK
+        const storedUser = localStorage.getItem('arsha_user');
+        if (!storedUser) {
+            console.warn("No user session found. Redirecting...");
+            window.location.href = 'index.html';
+        } else {
+            const user = JSON.parse(storedUser);
+            console.log("Welcome " + user.name);
 
-        // Migration for old stats structure if learnedLog is missing
-        if (!userStats.learnedLog) {
-            userStats.learnedLog = [];
-            // Just reset count to 0 or keep old count? Let's reset to sync with actual log to be accurate
-            userStats.wordsLearned = 0;
+            // UNIQUE STATS KEY FOR THIS USER
+            window.statsKey = 'arsha_userStats_' + user.id;
+
+            const storedStats = localStorage.getItem(window.statsKey);
+
+            window.userStats = storedStats ? JSON.parse(storedStats) : {
+                streak: 1,
+                lastLogin: todayStr,
+                correctAnswers: 0,
+                totalQuestions: 0,
+                learnedLog: [], // Store unique identifiers of words/phrases learned
+                wordsLearned: 0, // Explicitly init to 0
+                totalSectionsCompleted: 0, // NEW: Track total cumulative sections for rewards
+                rewardsClaimed: 0 // NEW: Track how many sets of 5 have been claimed
+            };
+
+            // Sync wordsLearned with log length just in case
+            if (window.userStats.learnedLog) {
+                window.userStats.wordsLearned = window.userStats.learnedLog.length;
+            }
         }
 
-        // Ensure count matches log size (or set it if missing)
-        userStats.wordsLearned = userStats.learnedLog.length;
-
-        // Daily Reset & Streak Logic
-        if (userStats.lastLogin !== todayStr) {
-            const lastLoginDate = new Date(userStats.lastLogin);
+        // Daily Reset & Streak Logic (Restored)
+        if (window.userStats && window.userStats.lastLogin !== todayStr) {
+            const lastLoginDate = new Date(window.userStats.lastLogin);
             const yesterday = new Date();
             yesterday.setDate(yesterday.getDate() - 1);
 
             if (lastLoginDate.toDateString() === yesterday.toDateString()) {
-                userStats.streak += 1;
+                window.userStats.streak += 1;
             } else {
-                userStats.streak = 1;
+                window.userStats.streak = 1;
             }
 
             // Reset daily accuracy counts
-            userStats.correctAnswers = 0;
-            userStats.totalQuestions = 0;
+            window.userStats.correctAnswers = 0;
+            window.userStats.totalQuestions = 0;
 
-            userStats.lastLogin = todayStr;
-            localStorage.setItem('arsha_userStats', JSON.stringify(userStats));
+            window.userStats.lastLogin = todayStr;
+
+            // SAVE WITH KEY if available
+            if (window.statsKey) {
+                localStorage.setItem(window.statsKey, JSON.stringify(window.userStats));
+            }
         }
+
+        window.languageProgress = {};
 
         let draggedPlanet = null;
         let isDragging = false;
@@ -2011,7 +2030,7 @@
             document.getElementById('stat-streak').textContent = userStats.streak;
             const acc = userStats.totalQuestions === 0 ? 0 : Math.round((userStats.correctAnswers / userStats.totalQuestions) * 100);
             document.getElementById('stat-accuracy').textContent = `${acc}%`;
-            document.getElementById('stat-words').textContent = userStats.wordsLearned;
+            document.getElementById('stat-words').textContent = userStats.wordsLearned || 0;
         }
 
         const SECTIONS_PER_REWARD = 5;
@@ -2057,7 +2076,7 @@
 
                 // Update Stats
                 userStats.rewardsClaimed = (userStats.rewardsClaimed || 0) + 1;
-                localStorage.setItem('arsha_userStats', JSON.stringify(userStats));
+                localStorage.setItem(window.statsKey, JSON.stringify(userStats));
 
                 // Visual Feedback (Simple confetti-like effect or just button anim)
                 const btn = document.getElementById('claim-reward-btn');
@@ -2675,21 +2694,10 @@
             }
 
             document.getElementById('sign-out-btn').addEventListener('click', () => {
-                if (typeof firebase !== 'undefined' && firebase.auth) {
-                    firebase.auth().signOut().then(() => {
-                        console.log('User signed out successfully.');
-                        // Change this line to redirect
-                        window.location.href = '/index.html';
-                    }).catch((error) => {
-                        console.error('Sign out error:', error);
-                        alert('Error signing out. Please check the console.');
-                    });
-                } else {
-                    console.error('Firebase is not initialized. Cannot sign out.');
-                    alert("Simulating sign out. The page will now reload.");
-                    // Also change this line for consistency
-                    window.location.href = '/index.html';
-                }
+                // Clear user session
+                localStorage.removeItem('arsha_user');
+                console.log('User signed out.');
+                window.location.href = 'index.html';
             });
 
 
@@ -2752,7 +2760,7 @@
                     // userStats.wordsLearned += 5; 
                 }
 
-                localStorage.setItem('arsha_userStats', JSON.stringify(userStats));
+                localStorage.setItem(window.statsKey, JSON.stringify(userStats));
                 updateRightPanelStats();
 
                 if (isWin && !isAlreadyCompleted) {
@@ -2768,7 +2776,7 @@
 
                         // Increment total sections for rewards
                         userStats.totalSectionsCompleted = (userStats.totalSectionsCompleted || 0) + 1;
-                        localStorage.setItem('arsha_userStats', JSON.stringify(userStats));
+                        localStorage.setItem(window.statsKey, JSON.stringify(userStats));
                         updateRewardUI();
                     }
 
@@ -3576,39 +3584,8 @@
             document.getElementById('translation-input').disabled = true;
         }
     </script>
-    <script type="module">
-        // Import the functions you need from the SDKs
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js"; // <-- Make sure signOut is imported!
 
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyCFdXSqHNQD9bNJtumCto8s7iyW035fT5o",
-            authDomain: "spango-9cc50.firebaseapp.com",
-            projectId: "spango-9cc50",
-            storageBucket: "spango-9cc50.appspot.com",
-            messagingSenderId: "337212261865",
-            appId: "1:337212261865:web:518b47905ef8a313bd3778",
-            measurementId: "G-4SM6KRZB7N"
-        };
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-
-        // ✅ CORRECTED SIGN-OUT CODE
-        document.getElementById('sign-out-btn').addEventListener('click', () => {
-            signOut(auth).then(() => {
-                // Sign-out successful.
-                console.log('User signed out successfully.');
-                window.location.href = '/index.html'; // Redirect to sign-in page
-            }).catch((error) => {
-                // An error happened.
-                console.error('Sign out error:', error);
-                alert('Error signing out.');
-            });
-        });
-    </script>
 </body>
 
 </html>
