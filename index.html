@@ -8,7 +8,7 @@
     <style>
         @font-face {
             font-family: 'PixelFont';
-            /* Make sure 'pixel.ttf' is in the same folder as this HTML file */
+            
             src: url('pixel.ttf') format('truetype');
         }
 
@@ -42,7 +42,7 @@
             padding: 40px;
             position: relative;
             overflow: hidden;
-            /* Ensure flags don't spill over */
+            
         }
 
         .right-panel {
@@ -55,23 +55,18 @@
             border-left: none;
         }
 
-        /* Container for the 3D Planet */
+        
         #planet-canvas-container {
             width: 1000px;
             height: 1000px;
             position: absolute;
             z-index: 2;
-            /* Increased z-index so it sits above flags */
+            
             display: flex;
             align-items: center;
             justify-content: center;
             pointer-events: none;
-            /* Absolute centered by default via parent flex, but let's be explicit if needed. 
-               Actually parent justify-center centers flow content. 
-               Ideally we want planet exactly center. Flex items absolute position is relative to padding box. 
-               top/left/right/bottom 0 margin auto centers absolute items in some cases, 
-               but simply being a child of flex center works usually for size 0 items, 
-               but this has size. Let's force center.*/
+            
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
@@ -82,7 +77,7 @@
             height: 100% !important;
         }
 
-        /* Flag Background Container */
+        
         #flag-background {
             position: absolute;
             top: 0;
@@ -90,7 +85,7 @@
             width: 100%;
             height: 100%;
             z-index: 1;
-            /* Behind planet (z-2) and title (z-10) */
+            
             overflow: hidden;
             pointer-events: none;
         }
@@ -98,7 +93,7 @@
         .flag-item {
             position: absolute;
             width: 50px;
-            /* Base width */
+            
             opacity: 0.25;
             filter: grayscale(0.2);
             user-select: none;
@@ -107,7 +102,7 @@
         .login-title {
             margin: 0;
             font-size: 8.5rem;
-            /* Large size maintained */
+            
             font-weight: 900;
             line-height: 1;
             z-index: 10;
@@ -119,7 +114,7 @@
             color: transparent;
             transition: background 0.5s ease;
             filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.9));
-            /* Flex center handles position */
+            
         }
 
         .mission-statement {
@@ -130,9 +125,9 @@
             text-align: center;
             z-index: 10;
             position: absolute;
-            /* Removed from flow to allow Title to center perfectly */
+            
             bottom: 15%;
-            /* Positioned lower down */
+            
             text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.8);
             font-weight: bold;
         }
@@ -199,7 +194,7 @@
             pointer-events: none;
         }
 
-        /* Media query for mobile responsiveness */
+        
         @media (max-width: 768px) {
             .container-split {
                 flex-direction: column;
@@ -225,7 +220,7 @@
             }
         }
 
-        /* Auth Box Styles */
+        
         .auth-card {
             background-color: rgba(40, 40, 40, 0.7);
             border-radius: 30px;
@@ -306,7 +301,7 @@
             padding: 0 10px;
         }
 
-        /* Full Screen Flags */
+        
         #flag-background {
             position: fixed;
             top: 0;
@@ -318,7 +313,7 @@
             overflow: hidden;
         }
 
-        /* Adjust Z-Index hierarchy */
+        
         #stars-container {
             z-index: -1;
         }
@@ -328,18 +323,18 @@
             z-index: 10;
         }
 
-        /* Transparent Panels to show flags */
+        
         .left-panel {
             background: rgba(0, 0, 0, 0.3);
-            /* Slight tint but see-through */
+            
         }
 
         .right-panel {
             background: rgba(0, 0, 0, 0.5);
-            /* Slight tint for contrast */
+            
         }
 
-        /* Custom Google Button Styles */
+        
         .google-btn-wrapper {
             position: relative;
             width: 250px;
@@ -354,13 +349,13 @@
             width: 100%;
             height: 100%;
             background-color: #4285F4;
-            /* Google Blue */
+            
             color: white;
             border: none;
             border-radius: 8px;
-            /* Rounded square */
+            
             font-family: 'PixelFont', sans-serif;
-            /* Pixel font */
+            
             font-size: 16px;
             font-weight: bold;
             display: flex;
@@ -385,7 +380,7 @@
             background-color: #357ae8;
         }
 
-        /* Invisible clickable overly */
+        
         .g_id_signin {
             position: absolute;
             top: 0;
@@ -394,20 +389,20 @@
             height: 100%;
             z-index: 10;
             opacity: 0.01;
-            /* Almost invisible but clickable */
+            
             overflow: hidden;
         }
     </style>
 </head>
 
 <body>
-    <!-- Flags Background moved to body level -->
+    
     <div id="flag-background"></div>
     <div id="stars-container"></div>
 
     <div class="container-split">
         <div class="left-panel">
-            <!-- Flags moved to body -->
+            
             <div id="planet-canvas-container"></div>
             <h1 class="login-title">basha</h1>
             <p class="mission-statement">Revolutionizing language learning through AI and Speech Recognition!</p>
@@ -416,9 +411,9 @@
             <div class="auth-card">
                 <h2 style="margin: 0 0 20px 0; font-size: 2rem;" id="auth-title">Log In</h2>
 
-                <!-- Custom Google Button Wrapper -->
+                
                 <div class="google-btn-wrapper">
-                    <!-- The visible custom button -->
+                    
                     <button class="custom-google-btn">
                         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                             <path
@@ -437,7 +432,7 @@
                         Sign in with Google
                     </button>
 
-                    <!-- The invisible real button overlay -->
+                    
                     <div id="g_id_onload"
                         data-client_id="425930651750-5f5eigjq68ca00enab9etc7h09g2g2hn.apps.googleusercontent.com"
                         data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse"
@@ -455,20 +450,20 @@
         </div>
     </div>
 
-    <!-- Google Identity Services Script -->
+    
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    <!-- Three.js Library -->
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
     <script>
-        // Google OAuth Response Handler
+        
         function handleCredentialResponse(response) {
-            // Decode the JWT to get user info
+            
             const responsePayload = decodeJwtResponse(response.credential);
 
             console.log("Logged in as: " + responsePayload.name);
 
-            // Save user to localStorage (replacing Firebase session)
+            
             const user = {
                 id: responsePayload.sub,
                 name: responsePayload.name,
@@ -477,11 +472,11 @@
             };
             localStorage.setItem('arsha_user', JSON.stringify(user));
 
-            // Redirect to the main app
+            
             window.location.href = 'app.html';
         }
 
-        // JWT Decoder Helper
+        
         function decodeJwtResponse(token) {
             var base64Url = token.split('.')[1];
             var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -493,12 +488,12 @@
         }
 
 
-        // ======================================
-        // FLAG BACKGROUND SETUP (SVG)
-        // ======================================
+        
+        
+        
         function createFlagBackground() {
             const container = document.getElementById('flag-background');
-            // Extended list of codes from directory
+            
             const allFlags = [
                 'ad', 'ae', 'af', 'ag', 'ai', 'al', 'am', 'ao', 'aq', 'ar', 'as', 'at', 'au', 'aw', 'ax', 'az',
                 'ba', 'bb', 'bd', 'be', 'bf', 'bg', 'bh', 'bi', 'bj', 'bl', 'bm', 'bn', 'bo', 'bq', 'br', 'bs', 'bt', 'bv', 'bw', 'by', 'bz',
@@ -508,13 +503,13 @@
                 'hk', 'hm', 'hn', 'hr', 'ht', 'hu', 'id', 'ie', 'il', 'im', 'in', 'io', 'iq', 'ir', 'is', 'it'
             ];
 
-            // Shuffle function (Fisher-Yates)
+            
             for (let i = allFlags.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
                 [allFlags[i], allFlags[j]] = [allFlags[j], allFlags[i]];
             }
 
-            // Slice first 40 unique flags
+            
             const selectedFlags = allFlags.slice(0, 40);
 
             selectedFlags.forEach(code => {
@@ -523,30 +518,30 @@
                 img.src = `svg/${code}.svg`;
                 img.alt = code;
 
-                // Random Positioning
+                
                 const x = Math.random() * 100;
                 const y = Math.random() * 100;
                 img.style.left = `${x}%`;
                 img.style.top = `${y}%`;
 
-                // Random Size
+                
                 const size = 30 + Math.random() * 60;
                 img.style.width = `${size}px`;
 
-                // Random Rotation
+                
                 const rotation = Math.random() * 360;
                 img.style.transform = `rotate(${rotation}deg)`;
 
-                // Random Opacity
+                
                 img.style.opacity = 0.05 + Math.random() * 0.2;
 
                 container.appendChild(img);
             });
         }
 
-        // ======================================
-        // 3D SCENE SETUP (Reused from app.html)
-        // ======================================
+        
+        
+        
 
         const patternFunctions = {
             horizontalStripes: (context, c1, c2, canvas) => { context.strokeStyle = '#' + c1; context.lineWidth = 30; for (let i = 0; i < 10; i++) { context.beginPath(); context.moveTo(0, i * 30 + 15); context.lineTo(canvas.width, i * 30 + 15); context.stroke(); } },
@@ -580,7 +575,7 @@
         function createPlanetScene() {
             const container = document.getElementById('planet-canvas-container');
             const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000); // aspect ratio 1 for square container
+            const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 1000); 
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 
             renderer.setSize(container.clientWidth, container.clientHeight);
@@ -593,9 +588,9 @@
             pointLight.position.set(10, 10, 10);
             scene.add(pointLight);
 
-            // Green Planet Parameters (matches 'Green' from app)
+            
             const planetColor = 0x00CC66;
-            const planetSize = 1.4; // Reduced size further (was 1.8)
+            const planetSize = 1.4; 
 
             const geometry = new THREE.SphereGeometry(planetSize, 32, 32);
             const texture = generatePlanetTexture(planetColor, 1, false, 'default');
@@ -606,20 +601,20 @@
             const group = new THREE.Group();
             group.add(planet);
 
-            // Outline - "Cel-Shaded" style logic from app
+            
             const outlineGeometry = new THREE.SphereGeometry(planetSize * 1.05, 32, 32);
             const outlineMaterial = new THREE.MeshBasicMaterial({ color: 0x000000, side: THREE.BackSide });
             const outline = new THREE.Mesh(outlineGeometry, outlineMaterial);
             group.add(outline);
 
-            // Rings
-            // Ring colors from app: new THREE.Color(color).multiplyScalar(0.4)
+            
+            
             const ringColor = new THREE.Color(planetColor).multiplyScalar(0.4);
             const ringGeo = new THREE.RingGeometry(planetSize * 1.3, planetSize * 1.8, 32);
             const ringMat = new THREE.MeshToonMaterial({ color: ringColor, side: THREE.DoubleSide, transparent: true, opacity: 0.9 });
             const ring = new THREE.Mesh(ringGeo, ringMat);
 
-            // Randomish rotation from app:
+            
             ring.rotation.x = Math.PI / 2 + 0.2;
             ring.rotation.y = -0.1;
             group.add(ring);
@@ -632,11 +627,11 @@
             ring2.rotation.y = ring.rotation.y;
             group.add(ring2);
 
-            // Initial Position for the Group
-            // Center it
+            
+            
             group.position.set(0, 0, 0);
 
-            // Tilt the whole group slightly so we see the planet nicely
+            
             group.rotation.z = -0.1;
             group.rotation.x = 0.2;
 
@@ -646,14 +641,14 @@
 
             function animate() {
                 requestAnimationFrame(animate);
-                // Rotate the planet group like the home page planets do
-                group.rotation.y += 0.005; // Slow spin
+                
+                group.rotation.y += 0.005; 
                 renderer.render(scene, camera);
             }
             animate();
         }
 
-        // --- Background Stars (Simplified version same as before) ---
+        
         function createStarBackground() {
             const container = document.getElementById('stars-container');
             const scene = new THREE.Scene();
@@ -690,10 +685,10 @@
             });
         }
 
-        // Init Everything
+        
         createStarBackground();
-        createFlagBackground(); // Initialize Flags
-        createPlanetScene(); // The new 3D planet
+        createFlagBackground(); 
+        createPlanetScene(); 
     </script>
 </body>
 
