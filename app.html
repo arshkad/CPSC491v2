@@ -35,7 +35,14 @@
 
         #react-root {
             display: none;
-            /* Initially hidden */
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 50;
+            width: 100vw;
+            height: 100vh;
+            background: transparent;
+            pointer-events: auto;
         }
 
         canvas {
@@ -1781,7 +1788,7 @@
         <div id="planet-tooltip"></div>
         <div id="section-modal-overlay"></div>
         <div id="section-modal-overlay"></div>
-        <div id="home-prompt">click on a planet to get started</div>
+        <div id="home-prompt">Click on a planet or drag to organize!</div>
         <div id="locked-planet-popup">
             THIS PLANET IS LOCKED!<br>COMPLETE AVAILABLE PLANETS FIRST
         </div>
@@ -2405,55 +2412,7 @@
 
                 initializeState();
                 applyTheme(userStats.activeTheme);
-                window.addEventListener('endQuiz', (e) => {
-                    const appContainer = document.getElementById('app-container');
-                    appContainer.style.display = 'block';
-                    requestAnimationFrame(() => { appContainer.style.opacity = '1'; });
-
-                    if (!e.detail) return;
-                    const { isWin, isAlreadyCompleted, sectionNumber, planetName, correctCount, totalCount, learnedWords } = e.detail;
-
-                    if (isWin) {
-                        userStats.totalQuestions = (userStats.totalQuestions || 0) + totalCount;
-                        userStats.correctAnswers = (userStats.correctAnswers || 0) + correctCount;
-
-                        if (Array.isArray(learnedWords)) {
-                            if (!userStats.learnedLog) userStats.learnedLog = [];
-                            learnedWords.forEach(word => {
-                                if (!userStats.learnedLog.includes(word)) {
-                                    userStats.learnedLog.push(word);
-                                }
-                            });
-                            userStats.wordsLearned = userStats.learnedLog.length;
-                        }
-
-                        if (!isAlreadyCompleted) {
-                            if (!languageProgress[currentLanguage].completedSections[planetName]) {
-                                languageProgress[currentLanguage].completedSections[planetName] = [];
-                            }
-                            if (!languageProgress[currentLanguage].completedSections[planetName].includes(sectionNumber)) {
-                                languageProgress[currentLanguage].completedSections[planetName].push(sectionNumber);
-                                userStats.totalSectionsCompleted = (userStats.totalSectionsCompleted || 0) + 1;
-                            }
-
-                            if (languageProgress[currentLanguage].completedSections[planetName].length >= 5) {
-                                const currentIndex = planetUnlockOrder.indexOf(planetName);
-                                if (currentIndex >= 0 && currentIndex < planetUnlockOrder.length - 1) {
-                                    const nextPlanet = planetUnlockOrder[currentIndex + 1];
-                                    unlockPlanet(nextPlanet);
-                                }
-                            }
-                        }
-
-                        saveStats();
-                        updateRightPanelStats();
-                        updateRewardUI();
-                    }
-                    resetAndRebuildScene();
-                });
-
                 animate();
-
                 updateCreditDisplay();
                 updateShopUI();
 
@@ -2565,9 +2524,22 @@
                     const planetSections = languageProgress[currentLanguage].completedSections[planetName] || [];
                     const isAlreadyCompleted = planetSections.includes(sectionIndex + 1);
 
-                    const appContainer = document.getElementById('app-container');
-                    appContainer.style.opacity = '0';
-                    setTimeout(() => { appContainer.style.display = 'none'; }, 500);
+                    planetSystem.visible = false; // Hide planets for quiz background
+
+                    // Hide UI elements instead of the entire container so stars remain visible
+                    // Hide modal immediately
+                    hideSectionModal();
+
+                    // Hide UI elements instead of the entire container so stars remain visible
+                    const homeHeader = document.getElementById('home-header');
+                    const topMenu = document.querySelector('.top-menu');
+                    const rightPanel = document.getElementById('right-info-panel');
+                    const homePrompt = document.getElementById('home-prompt');
+
+                    if (homeHeader) homeHeader.style.opacity = '0';
+                    if (topMenu) topMenu.style.opacity = '0';
+                    if (rightPanel) rightPanel.style.opacity = '0';
+                    if (homePrompt) homePrompt.style.opacity = '0';
 
                     const event = new CustomEvent('startQuiz', {
                         detail: {
@@ -2580,20 +2552,26 @@
                     });
                     window.dispatchEvent(event);
                 }
-
                 function zoomOut() {
                     isZoomed = false;
                     targetPlanet = null;
-                    const appContainer = document.getElementById('app-container');
-                    appContainer.style.display = 'block';
-                    setTimeout(() => { appContainer.style.opacity = '1'; }, 10);
+
+                    // Restore UI elements created/hidden in startLesson
+                    const homeHeader = document.getElementById('home-header');
+                    const topMenu = document.querySelector('.top-menu');
+                    const rightPanel = document.getElementById('right-info-panel');
+                    const homePrompt = document.getElementById('home-prompt');
+
+                    if (homeHeader) homeHeader.style.opacity = '1';
+                    if (topMenu) topMenu.style.opacity = '1';
+                    if (rightPanel) rightPanel.style.opacity = '1';
+                    if (homePrompt) homePrompt.style.opacity = '1';
 
                     planetSystem.traverse(child => { if (child.material) { child.visible = true; new TWEEN.Tween(child.material).to({ opacity: 1 }, 1200).start(); } });
                     stars.visible = true;
                     new TWEEN.Tween(stars.material).to({ opacity: 1 }, 1200).start();
                     new TWEEN.Tween(camera.position).to(originalCameraPos, 1200).start();
                     new TWEEN.Tween(scene.background).to(new THREE.Color(0x000000), 1200).start();
-                    document.querySelector('.top-menu').style.opacity = 1;
                 }
 
                 function unlockPlanet(planetName) {
@@ -2649,7 +2627,6 @@
                         } else if (wasPractice) { // If coming FROM practice, planets are already hidden.
                             planetSystem.visible = false;
                         }
-
 
                         const newViewEl = document.getElementById(newView + '-view');
                         newViewEl.style.display = 'flex';
@@ -2739,12 +2716,12 @@
 
                 function applyTheme(themeName) {
                     if (userStats.activeTheme === themeName && themeName !== 'default') {
-                        // Force re-apply only on init, but logic check handles it
+                        // Force re-apply only on init
                     }
                     userStats.activeTheme = themeName;
                     saveStats();
 
-                    // NEW: Apply UI Theme
+                    // Apply UI Theme
                     const ui = themeUI[themeName] || themeUI['default'];
                     const header = document.getElementById('home-header');
                     const title = document.querySelector('#home-header h1');
@@ -2792,8 +2769,7 @@
 
                     demoState.planets = [];
                     planetUnlockOrder.forEach(name => {
-                        const data = demoPlanetData[name]; // USE DEMO DATA
-                        // Note: createPlanet expects 'data' to have .name too, so we add it manually or spread it
+                        const data = demoPlanetData[name];
                         const planetGroup = createPlanet({ name, ...data }, demoState.scene, themeName);
                         demoState.planets.push(planetGroup);
                         demoState.scene.add(planetGroup);
@@ -2836,8 +2812,6 @@
                     if (currentView === 'home') {
                         document.getElementById('home-header').style.display = 'block';
                         document.getElementById('right-info-panel').style.opacity = '1';
-                    } else {
-                        // If we were in shop/settings, header/panel stay hidden, but menu returns
                     }
                     document.querySelector('.top-menu').style.opacity = '1';
                 }
@@ -2885,8 +2859,6 @@
                     const planetSections = languageProgress[currentLanguage].completedSections[planetName] || [];
                     const color = `#${new THREE.Color(themePalettes[userStats.activeTheme][planetName]).getHexString()}`;
 
-                    const pastelColors = ['#b3e2cd', '#fdcdac', '#cbd5e8', '#f4cae4', '#fff2ae'];
-
                     let content = `
                     <div class="section-modal-content">
                         <button class="section-modal-close">✕</button>
@@ -2896,22 +2868,29 @@
                     for (let i = 0; i < 5; i++) {
                         const sectionNum = i + 1;
                         const isCompleted = planetSections.includes(sectionNum);
-                        const isUnlocked = i === 0 || planetSections.includes(i);
+                        const isUnlocked = i === 0 || planetSections.includes(i) || isCompleted; // Unlock if prev completed OR self completed logic
 
                         let buttonClasses = 'section-button';
                         let buttonStyle = '';
                         if (isCompleted) {
                             buttonClasses += ' completed';
-                            const pastelColor = pastelColors[i % pastelColors.length];
-                            buttonStyle = `style="background-color: ${pastelColor}; border-color: ${pastelColor};"`;
+                            buttonStyle = `style="background-color: #58a700; border-color: #4a8c00; color: white;"`;
                         } else if (isUnlocked) {
                             buttonClasses += ' unlocked';
                         }
 
+                        // Fix for first section of unlocked planet:
+                        if (i === 0 && languageProgress[currentLanguage].unlockedPlanets.has(planetName)) {
+                            if (!buttonClasses.includes('unlocked') && !isCompleted) buttonClasses += ' unlocked';
+                        }
+
+                        // Final consistency check for disabled
+                        const isReallyUnlocked = buttonClasses.includes('unlocked') || isCompleted;
+
                         content += `
                         <button 
                             class="${buttonClasses}"
-                            ${isUnlocked ? '' : 'disabled'}
+                            ${isReallyUnlocked ? '' : 'disabled'}
                             data-section="${i}"
                             ${buttonStyle}
                         >
@@ -2943,36 +2922,34 @@
                 }
 
                 document.getElementById('sign-out-btn').addEventListener('click', () => {
-                    // Clear user session
                     localStorage.removeItem('arsha_user');
-                    console.log('User signed out.');
                     window.location.href = 'index.html';
                 });
 
 
                 document.querySelectorAll('.action-button').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const theme = button.dataset.theme;
+                    button.addEventListener('click', (e) => {
+                        const theme = e.target.dataset.theme;
                         if (userStats.purchasedThemes.includes(theme) || theme === 'default') {
                             applyTheme(theme);
                         } else { // Buy
-                            const cost = parseInt(button.dataset.cost);
+                            const cost = parseInt(e.target.dataset.cost);
                             if (userStats.credits >= cost) {
                                 userStats.credits -= cost;
                                 userStats.purchasedThemes.push(theme);
-                                localStorage.setItem(window.statsKey, JSON.stringify(userStats));
+                                saveStats(); // Persist purchase
 
                                 updateCreditDisplay();
                                 updateShopUI();
-                                applyTheme(theme); // Equip after buying
+                                applyTheme(theme);
                             }
                         }
                     });
                 });
 
                 document.querySelectorAll('.demo-button').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const theme = button.dataset.theme;
+                    button.addEventListener('click', (e) => {
+                        const theme = e.target.dataset.theme;
                         startDemo(theme);
                     });
                 });
@@ -2984,35 +2961,33 @@
                 });
 
                 document.getElementById('language-options').addEventListener('click', (e) => {
-                    if (e.target.tagName === 'A') {
-                        const newLang = e.target.dataset.lang;
+                    // Check for closest Link/A or checking target
+                    const target = e.target.closest('a');
+                    if (target) {
+                        const newLang = target.dataset.lang;
                         switchLanguage(newLang);
                         document.getElementById('language-options').classList.remove('visible');
                     }
                 });
 
+                // Listeners
                 window.addEventListener('lessonCompleted', (e) => {
                     const { planetName, sectionNumber, isWin, isAlreadyCompleted, correctCount, totalCount, learnedWords } = e.detail;
 
-                    // Update Stats
                     if (correctCount !== undefined) {
                         userStats.correctAnswers += correctCount;
                         userStats.totalQuestions += totalCount;
                     }
 
                     if (learnedWords && learnedWords.length > 0) {
-                        // Use Set to ensure uniqueness in log
                         const uniqueLog = new Set(userStats.learnedLog || []);
                         learnedWords.forEach(word => uniqueLog.add(word));
                         userStats.learnedLog = Array.from(uniqueLog);
                         userStats.wordsLearned = uniqueLog.size;
-                    } else if (isWin && !isAlreadyCompleted && (!learnedWords || learnedWords.length === 0)) {
-                        // Fallback if learnedWords not sent for some reason, but we shouldn't hit this with new React code
-                        // userStats.wordsLearned += 5; 
                     }
 
-                    localStorage.setItem(window.statsKey, JSON.stringify(userStats));
-                    updateRightPanelStats();
+                    saveStats();
+                    if (typeof updateRightPanelStats === 'function') updateRightPanelStats();
 
                     if (isWin && !isAlreadyCompleted) {
                         const currentLangProgress = languageProgress[currentLanguage];
@@ -3023,14 +2998,14 @@
                             currentLangProgress.completedSections[planetName].push(sectionNumber);
                             const creditsEarned = (sectionNumber === 5) ? 100 : 50;
                             userStats.credits += creditsEarned;
-                            localStorage.setItem(window.statsKey, JSON.stringify(userStats));
+                            saveStats();
                             updateCreditDisplay();
 
-                            // Increment total sections for rewards
                             userStats.totalSectionsCompleted = (userStats.totalSectionsCompleted || 0) + 1;
-                            localStorage.setItem(window.statsKey, JSON.stringify(userStats));
-                            updateRewardUI();
+                            saveStats();
+                            if (typeof updateRewardUI === 'function') updateRewardUI();
                         }
+
 
                         const currentPlanetIndex = planetUnlockOrder.indexOf(planetName);
                         if ((currentLangProgress.completedSections[planetName]?.length || 0) === 5 && currentPlanetIndex < planetUnlockOrder.length - 1) {
@@ -3040,11 +3015,24 @@
                             }
                         }
                     }
+
+                    resetAndRebuildScene();
+                    hideSectionModal();
                 });
+
                 window.addEventListener('endQuiz', () => {
-                    const appContainer = document.getElementById('app-container');
-                    appContainer.style.display = 'block';
-                    setTimeout(() => { appContainer.style.opacity = '1'; }, 10);
+                    // Restore UI elements created/hidden in startLesson
+                    const homeHeader = document.getElementById('home-header');
+                    const topMenu = document.querySelector('.top-menu');
+                    const rightPanel = document.getElementById('right-info-panel');
+                    const homePrompt = document.getElementById('home-prompt');
+
+                    if (homeHeader) homeHeader.style.opacity = '1';
+                    if (topMenu) topMenu.style.opacity = '1';
+                    if (rightPanel) rightPanel.style.opacity = '1';
+                    if (homePrompt) homePrompt.style.opacity = '1';
+
+                    planetSystem.visible = true;
                     zoomOut();
                 });
 
@@ -3522,8 +3510,23 @@
                 );
             };
 
+            const getBackgroundStyle = () => {
+                if (!theme.color) return { background: 'transparent' };
+                const c = new THREE.Color(theme.color);
+                const hsl = {};
+                c.getHSL(hsl);
+                // Ensure not too dark
+                if (hsl.l < 0.2) {
+                    c.setHSL(hsl.h, hsl.s, 0.3);
+                }
+                const colorHex = '#' + c.getHexString();
+                return {
+                    background: `radial-gradient(circle at center, ${colorHex}CC 0%, transparent 70%)`
+                };
+            };
+
             return (
-                <div className="quiz-container" style={{ backgroundColor: theme.color }}>
+                <div className="quiz-container" style={getBackgroundStyle()}>
                     <div className="quiz-header">
                         <button className="leave-button" onClick={handleLeaveClick}>LEAVE</button>
                         <div className="progress-bar"><div className="progress-bar-inner" style={{ width: `${progress}%` }}></div></div>
