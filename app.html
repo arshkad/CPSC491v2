@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>spango</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <style>
@@ -100,6 +100,60 @@
             animation: blinkRed 1s infinite;
         }
 
+        /* Shake Animation */
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            10%,
+            30%,
+            50%,
+            70%,
+            90% {
+                transform: translateX(-5px);
+            }
+
+            20%,
+            40%,
+            60%,
+            80% {
+                transform: translateX(5px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+            border-color: #e74c3c !important;
+            box-shadow: 0 0 10px #e74c3c;
+        }
+
+        /* Persistent Instructions Overlay */
+        #game-instructions-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10%;
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            color: white;
+            pointer-events: none;
+        }
+
+        #game-instructions-text {
+            font-size: 1.5rem;
+            color: #f1c40f;
+            text-shadow: 2px 2px 4px black;
+            font-weight: bold;
+            padding-top: 20px;
+        }
+
         /* NEW: Right Side Info Panel */
         #right-info-panel {
             position: absolute;
@@ -147,9 +201,9 @@
 
         #reward-progress-bar-container {
             width: 100%;
-            height: 80px;
+            height: 40px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 30px;
+            border-radius: 20px;
             position: relative;
             margin-bottom: 15px;
             overflow: hidden;
@@ -574,6 +628,12 @@
 
         #exit-demo-button:hover {
             background-color: #c82333;
+        }
+
+        /* Settings View Specifics */
+        #settings-view .content-bar {
+            height: 60vh;
+            /* Decrease size from bottom */
         }
 
         /* Styles for sections in settings */
@@ -1269,10 +1329,13 @@
             align-items: center;
             padding: 10px 20px;
             font-size: 1.5rem;
-            background-color: rgba(0, 0, 0, 0.4);
+            background-color: transparent;
+            /* Changed from rgba(0, 0, 0, 0.4) */
             border-radius: 10px;
             box-sizing: border-box;
             color: white;
+            text-shadow: 2px 2px 4px black;
+            /* Added for readability on transparent bg */
         }
 
         #lives-container {
@@ -1318,24 +1381,55 @@
             pointer-events: auto;
         }
 
+        #game-over-screen h1 {
+            font-size: 8vh;
+            margin: 0 0 2vh 0;
+            text-shadow: 4px 4px 0 #000;
+        }
+
+        #game-over-screen h2 {
+            font-size: 5vh;
+            margin: 0 0 2vh 0;
+            text-shadow: 3px 3px 0 #000;
+        }
+
         #missed-words-list {
-            margin-top: 20px;
+            margin-top: 2vh;
             background-color: rgba(0, 0, 0, 0.5);
-            padding: 15px;
-            border-radius: 10px;
-            max-height: 200px;
+            padding: 2vh 2vw;
+            border-radius: 15px;
+            max-height: 40vh;
+            /* Proportional height */
+            width: 60%;
+            /* Proportional width */
             overflow-y: auto;
             text-align: left;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        #missed-words-list h4 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            width: 100%;
         }
 
         #missed-words-list ul {
             list-style: none;
             padding: 0;
             margin: 0;
+            width: 100%;
+            text-align: center;
+            /* Center list items */
         }
 
         #missed-words-list li {
-            padding: 5px 0;
+            padding: 10px 0;
+            font-size: 1.5rem;
+            /* Increased font size */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         #damage-overlay {
@@ -1390,8 +1484,8 @@
         </div>
 
         <nav class="top-menu">
-            <a class="menu-item" data-view="shop">shop</a>
             <a class="menu-item active" data-view="home">home</a>
+            <a class="menu-item" data-view="shop">shop</a>
             <a class="menu-item" data-view="settings">settings</a>
             <a class="menu-item" data-view="practice">practice</a>
             <div class="credit-display"></div>
@@ -1583,6 +1677,7 @@
             <div id="practice-game-container">
                 <div id="game-area">
                     <div id="practice-game-canvas-container"></div>
+
                     <div id="damage-overlay"></div>
                     <div id="game-ui-overlay">
                         <div></div>
@@ -1591,14 +1686,25 @@
                                 <span>Score: <span id="score">0</span></span>
                                 <span>Lives: <span id="lives-container"></span></span>
                             </div>
-                            <input type="text" id="translation-input" placeholder="Type translation and press Enter"
-                                autocomplete="off">
+                            <!-- Wrapped input to stack instructions on top -->
+                            <div style="display: flex; flex-direction: column; align-items: center; flex-grow: 1;">
+                                <div id="practice-game-instructions"
+                                    style="color: #f1c40f; font-size: 2rem; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; text-shadow: 2px 2px 4px black; text-align: center;">
+                                    TYPE THE TRANSLATION FOR ASTEROIDS!
+                                </div>
+                                <input type="text" id="translation-input" placeholder="Type translation and press Enter"
+                                    autocomplete="off" style="width: 60%; text-align: center;">
+                            </div>
                         </div>
                     </div>
                     <div id="game-over-screen">
                         <h1>GAME OVER</h1>
                         <h2>Final Score: <span id="final-score">0</span></h2>
                         <div id="missed-words-list"></div>
+                        <button id="play-again-btn" onclick="startPracticeGame()"
+                            style="margin-top: 3vh; padding: 2vh 4vw; font-size: 3vh; background: #27ae60; color: white; border: none; border-radius: 1vh; cursor: pointer; font-family: 'PixelFont', sans-serif; text-transform: uppercase;">
+                            Play Again
+                        </button>
                     </div>
                 </div>
             </div>
@@ -1607,7 +1713,16 @@
         <div id="canvas-container"></div>
         <div id="split-screen-border"></div>
         <div id="right-info-panel">
-            <div id="stats-container">
+            <!-- NEW: Language Indicator -->
+            <div id="language-indicator-container"
+                style="position: absolute; top: 15px; right: 20px; display: flex; align-items: center; gap: 10px;">
+                <img id="lang-flag-icon" src="svg/es.svg"
+                    style="width: 28px; height: 28px; border-radius: 50%; box-shadow: 0 0 5px rgba(0,0,0,0.5); object-fit: cover;">
+                <span id="lang-name-label"
+                    style="font-size: 1rem; color: rgba(255,255,255,0.8); font-weight: bold; text-shadow: 1px 1px 2px black;">Spanish</span>
+            </div>
+
+            <div id="stats-container" style="margin-top: 40px;">
                 <div class="stat-item">
                     <div class="stat-row">
                         <div class="stat-icon">🔥</div>
@@ -1661,7 +1776,10 @@
         </div>
     </div>
 
-    <div id="demo-container" style="display: none;"></div>
+    <!-- Full Screen Demo Container -->
+    <div id="demo-container"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 1000; background: black;">
+    </div>
 
     <div id="react-root"></div>
 
@@ -1723,9 +1841,7 @@
         let currentView = 'home';
         let isShopInitialized = false;
 
-        let credits = 10000;
-        let purchasedThemes = new Set(['default']);
-        let activeTheme = 'default';
+        // Global variables moved to userStats for persistence
         let languageProgress = {};
 
         // Stats Variables
@@ -1748,7 +1864,7 @@
 
             const storedStats = localStorage.getItem(window.statsKey);
 
-            window.userStats = storedStats ? JSON.parse(storedStats) : {
+            const defaultStats = {
                 streak: 1,
                 lastLogin: todayStr,
                 correctAnswers: 0,
@@ -1756,8 +1872,14 @@
                 learnedLog: [], // Store unique identifiers of words/phrases learned
                 wordsLearned: 0, // Explicitly init to 0
                 totalSectionsCompleted: 0, // NEW: Track total cumulative sections for rewards
-                rewardsClaimed: 0 // NEW: Track how many sets of 5 have been claimed
+                rewardsClaimed: 0, // NEW: Track how many sets of 5 have been claimed
+                credits: 10000,
+                activeTheme: 'default',
+                purchasedThemes: ['default']
             };
+
+            // Merge stored stats with defaults to ensure new fields exist
+            window.userStats = storedStats ? { ...defaultStats, ...JSON.parse(storedStats) } : defaultStats;
 
             // Sync wordsLearned with log length just in case
             if (window.userStats.learnedLog) {
@@ -1783,9 +1905,8 @@
 
             window.userStats.lastLogin = todayStr;
 
-            // SAVE WITH KEY if available
             if (window.statsKey) {
-                localStorage.setItem(window.statsKey, JSON.stringify(window.userStats));
+                saveStats();
             }
         }
 
@@ -1823,6 +1944,16 @@
             Pink: { color: 0xEE66AA, size: 4.2, pos: new THREE.Vector3(-10, -5, 5) },
             Blue: { color: 0x0088DD, size: 3.2, pos: new THREE.Vector3(-25, -20, 0) },
             Purple: { color: 0x9966FF, size: 3.5, pos: new THREE.Vector3(-5, 10, -5) }
+        };
+
+        // NEW: Dispersed layout specifically for the Shop Demo
+        const demoPlanetData = {
+            Orange: { color: 0xDD8800, size: 3.5, pos: new THREE.Vector3(-25, 12, 0) },
+            Green: { color: 0x00CC66, size: 3.2, pos: new THREE.Vector3(20, 15, -10) },
+            Red: { color: 0xFF4444, size: 4.0, pos: new THREE.Vector3(-20, -12, -5) },
+            Pink: { color: 0xEE66AA, size: 4.2, pos: new THREE.Vector3(25, -8, 5) },
+            Blue: { color: 0x0088DD, size: 3.2, pos: new THREE.Vector3(-5, -22, 0) },
+            Purple: { color: 0x9966FF, size: 3.5, pos: new THREE.Vector3(0, 18, -5) }
         };
 
         const themePalettes = {
@@ -2070,596 +2201,703 @@
             const progressInCycle = total - (claimed * SECTIONS_PER_REWARD);
 
             if (progressInCycle >= SECTIONS_PER_REWARD) {
-                // Grant Reward
-                credits += REWARD_AMOUNT;
-                updateCreditDisplay();
-
-                // Update Stats
-                userStats.rewardsClaimed = (userStats.rewardsClaimed || 0) + 1;
-                localStorage.setItem(window.statsKey, JSON.stringify(userStats));
-
-                // Visual Feedback (Simple confetti-like effect or just button anim)
-                const btn = document.getElementById('claim-reward-btn');
-                btn.textContent = "Claimed! +200 💰";
-                setTimeout(() => updateRewardUI(), 1500);
             }
         }
 
+        function saveStats() {
+            const statsToSave = JSON.parse(JSON.stringify(userStats)); // Deep copy
+            // Convert Sets to Arrays for storage
+            if (statsToSave.languageProgress) {
+                Object.keys(statsToSave.languageProgress).forEach(lang => {
+                    const lp = statsToSave.languageProgress[lang];
+                    if (userStats.languageProgress[lang].unlockedPlanets instanceof Set) {
+                        lp.unlockedPlanets = Array.from(userStats.languageProgress[lang].unlockedPlanets);
+                    }
+                });
+            }
+            localStorage.setItem(window.statsKey, JSON.stringify(statsToSave));
+        }
+
         function init() {
-            camera.position.copy(originalCameraPos);
-            camera.lookAt(scene.position);
-            const homePrompt = document.getElementById('home-prompt');
-            homePrompt.style.opacity = 1;
-
-            updateRightPanelStats();
-            updateRewardUI();
-
-            function createPlanet(data, targetScene, theme = activeTheme) {
-                const name = data.name;
-                const isLocked = !languageProgress[currentLanguage].unlockedPlanets.has(name) && targetScene === scene;
-                const planetGroup = new THREE.Group();
-                planetGroup.userData = data;
-
-                const color = themePalettes[theme][name];
-                const mainColor = isLocked ? new THREE.Color(0x888888) : new THREE.Color(color);
-
-                const geometry = new THREE.SphereGeometry(data.size, 32, 32);
-                const planetTexture = generatePlanetTexture(color, name, isLocked, theme);
-                const material = new THREE.MeshToonMaterial({ color: mainColor, map: planetTexture, transparent: true, opacity: 1 });
-                const planet = new THREE.Mesh(geometry, material);
-                planetGroup.add(planet);
-
-                const isStarlightNoir = theme === 'starlightNoir';
-                const isCelShaded = theme === 'celShaded';
-
-                const outlineColor = isLocked ? 0x444444 : (isStarlightNoir ? 0xffffff : 0x000000);
-                const outlineSize = isCelShaded ? 1.15 : 1.05;
-
-                const outlineGeometry = new THREE.SphereGeometry(data.size * outlineSize, 32, 32);
-                const outlineMaterial = new THREE.MeshBasicMaterial({ color: outlineColor, side: THREE.BackSide, transparent: true, opacity: 1 });
-                const outline = new THREE.Mesh(outlineGeometry, outlineMaterial);
-                planetGroup.add(outline);
-
-                const ringGeometry = new THREE.RingGeometry(data.size * 1.3, data.size * 1.8, 32);
-                const ringColor = isLocked ? new THREE.Color(0x666666) : (isStarlightNoir || theme === 'blueprintGrid' ? new THREE.Color(0xffffff) : new THREE.Color(color).multiplyScalar(0.4));
-                const ringMaterial = new THREE.MeshToonMaterial({ color: ringColor, side: THREE.DoubleSide, transparent: true, opacity: 1 });
-                const ring = new THREE.Mesh(ringGeometry, ringMaterial);
-                ring.rotation.x = Math.PI / 2 + (Math.random() - 0.5) * 0.5;
-                ring.rotation.y = (Math.random() - 0.5) * 0.5;
-                planetGroup.add(ring);
-
-                const ringGeometry2 = new THREE.RingGeometry(data.size * 1.9, data.size * 2.1, 32);
-                const ringColor2 = isLocked ? new THREE.Color(0x777777) : (isStarlightNoir || theme === 'blueprintGrid' ? new THREE.Color(0xffffff) : new THREE.Color(color).multiplyScalar(0.6));
-                const ringMaterial2 = new THREE.MeshToonMaterial({ color: ringColor2, side: THREE.DoubleSide, transparent: true, opacity: 1 });
-                const ring2 = new THREE.Mesh(ringGeometry2, ringMaterial2);
-                ring2.rotation.x = ring.rotation.x;
-                ring2.rotation.y = ring.rotation.y;
-                planetGroup.add(ring2);
-
-                planetGroup.position.copy(data.pos);
-                return planetGroup;
-            }
-
-            function resetAndRebuildScene() {
-                while (planetSystem.children.length > 0) {
-                    planetSystem.remove(planetSystem.children[0]);
-                }
-                planets.length = 0;
-
-                planetUnlockOrder.forEach(name => {
-                    const planetGroup = createPlanet({ name, ...planetData[name] }, scene);
-                    planets.push(planetGroup);
-                    planetSystem.add(planetGroup);
-                });
-            }
-
-            const starVertices = [];
-            for (let i = 0; i < 10000; i++) starVertices.push(THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000));
-            const starGeometry = new THREE.BufferGeometry();
-            starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
-            const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, opacity: 1 });
-            const stars = new THREE.Points(starGeometry, starMaterial);
-            scene.add(stars);
-
-            const raycaster = new THREE.Raycaster();
-            const mouse = new THREE.Vector2();
-
-            const tooltip = document.getElementById('planet-tooltip');
-
-            function animate() {
-                requestAnimationFrame(animate);
-                TWEEN.update();
-
-                renderer.setClearColor(0x000000, currentView === 'home' && !isZoomed ? 1 : 0);
-
-                if (!isDragging && !isZoomed && currentView === 'home') {
-                    raycaster.setFromCamera(mouse, camera);
-                    const planetMeshes = planets.map(p => p.children[0]);
-                    const intersects = raycaster.intersectObjects(planetMeshes);
-                    const newHoveredPlanet = intersects.length > 0 ? intersects[0].object.parent : null;
-
-                    if (hoveredPlanet !== newHoveredPlanet) {
-                        if (hoveredPlanet) {
-                            new TWEEN.Tween(hoveredPlanet.scale).to({ x: 1, y: 1, z: 1 }, 300).easing(TWEEN.Easing.Quadratic.Out).start();
-                            hideTooltip();
-                        }
-                        if (newHoveredPlanet) {
-                            new TWEEN.Tween(newHoveredPlanet.scale).to({ x: 1.1, y: 1.1, z: 1.1 }, 300).easing(TWEEN.Easing.Quadratic.Out).start();
-                            showPlanetTooltip(newHoveredPlanet);
-                        }
-                        hoveredPlanet = newHoveredPlanet;
+            try {
+                // Validation: Ensure activeTheme is valid
+                if (!userStats.activeTheme || !themePalettes[userStats.activeTheme]) {
+                    console.warn(`Invalid theme '${userStats.activeTheme}' detected. Resetting to default.`);
+                    userStats.activeTheme = 'default';
+                    // Ensure purchasedThemes includes default
+                    if (!userStats.purchasedThemes.includes('default')) {
+                        userStats.purchasedThemes.push('default');
                     }
-                    canvasContainer.style.cursor = newHoveredPlanet && languageProgress[currentLanguage].unlockedPlanets.has(newHoveredPlanet.userData.name) ? 'pointer' : 'default';
+                    saveStats();
                 }
 
-                planets.forEach(p => { p.rotation.y += 0.002; });
-
-                if (!isZoomed && TWEEN.getAll().length === 0) {
-                    stars.material.opacity = Math.abs(Math.sin(Date.now() * 0.0005 * 0.7)) * 0.2 + 0.8;
-                }
-                renderer.render(scene, camera);
-            }
-
-            function initializeState() {
-                Object.keys(languageNames).forEach(lang => {
-                    languageProgress[lang] = {
-                        unlockedPlanets: new Set(['Orange']),
-                        completedSections: {}
-                    };
-                });
-            }
-
-            function switchLanguage(newLang) {
-                if (newLang === currentLanguage) return;
-
-                currentLanguage = newLang;
-
-                updateCreditDisplay();
-                updateShopUI();
-                document.getElementById('current-language-btn').textContent = languageNames[newLang];
-
-                resetAndRebuildScene();
-            }
-
-            initializeState();
-            resetAndRebuildScene();
-            animate();
-
-            updateCreditDisplay();
-            updateShopUI();
-
-            function onMouseDown(event) {
-                if (isZoomed || currentView !== 'home') return;
-
-                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-                dragStartPos.set(event.clientX, event.clientY);
-
-                raycaster.setFromCamera(mouse, camera);
-                const allPlanetMeshes = planets.map(p => p.children[0]);
-                const intersects = raycaster.intersectObjects(allPlanetMeshes);
-
-                if (intersects.length > 0) {
-                    draggedPlanet = intersects[0].object.parent;
-                    canvasContainer.style.cursor = 'grabbing';
-                }
-            }
-
-            function onMouseMove(event) {
-                mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-                mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-                if (draggedPlanet) {
-                    const dragEndPos = new THREE.Vector2(event.clientX, event.clientY);
-                    if (dragStartPos.distanceTo(dragEndPos) > 5) {
-                        isDragging = true;
-                        if (hoveredPlanet) {
-                            new TWEEN.Tween(hoveredPlanet.scale).to({ x: 1, y: 1, z: 1 }, 100).start();
-                            hoveredPlanet = null;
-                        }
-                        hideTooltip();
-                    }
-
-                    if (isDragging) {
-                        const vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
-                        vector.unproject(camera);
-                        const dir = vector.sub(camera.position).normalize();
-                        const distance = (draggedPlanet.position.z - camera.position.z) / dir.z;
-                        const pos = camera.position.clone().add(dir.multiplyScalar(distance));
-
-                        const vFOV = THREE.MathUtils.degToRad(camera.fov);
-                        const distFromCamera = camera.position.z - draggedPlanet.position.z;
-                        const height = 2 * Math.tan(vFOV / 2) * distFromCamera;
-                        const width = height * camera.aspect;
-                        const selfRadius = draggedPlanet.userData.size * 2.1;
-
-                        const minX = -width / 2 + selfRadius;
-                        const maxX = 0 - selfRadius;
-                        const minY = -height / 2 + selfRadius;
-
-                        // Calculate maxY to stop below the nav bar (roughly 180px from top)
-                        // Map 180px to world coordinates at planet depth
-                        const topBorderY = height / 2 - (180 / window.innerHeight) * height;
-                        const maxY = topBorderY - selfRadius;
-
-                        const proposedX = Math.max(minX, Math.min(maxX, pos.x));
-                        const proposedY = Math.max(minY, Math.min(maxY, pos.y));
-
-                        const proposedPosition = new THREE.Vector3(proposedX, proposedY, draggedPlanet.position.z);
-                        let collision = false;
-
-                        for (const planet of planets) {
-                            if (planet === draggedPlanet) continue;
-
-                            const distanceBetween = proposedPosition.distanceTo(planet.position);
-                            const otherRadius = planet.userData.size * 2.1;
-
-                            if (distanceBetween < selfRadius + otherRadius) {
-                                collision = true;
-                                break;
-                            }
-                        }
-
-                        if (!collision) {
-                            draggedPlanet.position.x = proposedX;
-                            draggedPlanet.position.y = proposedY;
-                        }
-                    }
-                }
-            }
-
-            function onMouseUp(event) {
-                if (isZoomed || currentView !== 'home') return;
-
-                if (!isDragging && hoveredPlanet) {
-                    if (languageProgress[currentLanguage].unlockedPlanets.has(hoveredPlanet.userData.name)) {
-                        showSectionModal(hoveredPlanet);
-                    } else {
-                        // LOCKED PLANET CLICK
-                        const popup = document.getElementById('locked-planet-popup');
-                        popup.style.display = 'block';
-
-                        // Hide after 3 seconds
-                        if (window.lockedPopupTimeout) clearTimeout(window.lockedPopupTimeout);
-                        window.lockedPopupTimeout = setTimeout(() => {
-                            popup.style.display = 'none';
-                        }, 3000);
-                    }
-                }
-
-                draggedPlanet = null;
-                isDragging = false;
-            }
-
-            function startLesson(planet, sectionIndex) {
-                hideTooltip();
-                hideSectionModal();
-
-                const planetName = planet.userData.name;
-                const planetSections = languageProgress[currentLanguage].completedSections[planetName] || [];
-                const isAlreadyCompleted = planetSections.includes(sectionIndex + 1);
-
-                const appContainer = document.getElementById('app-container');
-                appContainer.style.opacity = '0';
-                setTimeout(() => { appContainer.style.display = 'none'; }, 500);
-
-                const event = new CustomEvent('startQuiz', {
-                    detail: {
-                        color: `#${new THREE.Color(themePalettes[activeTheme][planetName]).getHexString()}`,
-                        planetName: planet.userData.name,
-                        lang: currentLanguage,
-                        sectionIndex: sectionIndex,
-                        isAlreadyCompleted: isAlreadyCompleted
-                    }
-                });
-                window.dispatchEvent(event);
-            }
-
-            function zoomOut() {
-                isZoomed = false;
-                targetPlanet = null;
-                const appContainer = document.getElementById('app-container');
-                appContainer.style.display = 'block';
-                setTimeout(() => { appContainer.style.opacity = '1'; }, 10);
-
-                planetSystem.traverse(child => { if (child.material) { child.visible = true; new TWEEN.Tween(child.material).to({ opacity: 1 }, 1200).start(); } });
-                stars.visible = true;
-                new TWEEN.Tween(stars.material).to({ opacity: 1 }, 1200).start();
-                new TWEEN.Tween(camera.position).to(originalCameraPos, 1200).start();
-                new TWEEN.Tween(scene.background).to(new THREE.Color(0x000000), 1200).start();
-                document.querySelector('.top-menu').style.opacity = 1;
-            }
-
-            function unlockPlanet(planetName) {
-                languageProgress[currentLanguage].unlockedPlanets.add(planetName);
-                resetAndRebuildScene(); // Rebuild to show unlocked state
-            }
-
-            function switchView(newView) {
-                if (newView === currentView) return;
-
+                camera.position.copy(originalCameraPos);
+                camera.lookAt(scene.position);
                 const homePrompt = document.getElementById('home-prompt');
-                hideTooltip();
+                if (homePrompt) homePrompt.style.opacity = 1;
 
-                const wasPractice = currentView === 'practice';
-                if (wasPractice && typeof stopPracticeGame === 'function') {
-                    stopPracticeGame();
+                updateRightPanelStats();
+                updateRewardUI();
+
+                function createPlanet(data, targetScene, theme = userStats.activeTheme) {
+                    const name = data.name;
+                    const isLocked = !languageProgress[currentLanguage].unlockedPlanets.has(name) && targetScene === scene;
+                    const planetGroup = new THREE.Group();
+                    planetGroup.userData = data;
+
+                    const color = themePalettes[theme][name];
+                    const mainColor = isLocked ? new THREE.Color(0x888888) : new THREE.Color(color);
+
+                    const geometry = new THREE.SphereGeometry(data.size, 32, 32);
+                    const planetTexture = generatePlanetTexture(color, name, isLocked, theme);
+                    const material = new THREE.MeshToonMaterial({ color: mainColor, map: planetTexture, transparent: true, opacity: 1 });
+                    const planet = new THREE.Mesh(geometry, material);
+                    planetGroup.add(planet);
+
+                    const isStarlightNoir = theme === 'starlightNoir';
+                    const isCelShaded = theme === 'celShaded';
+
+                    const outlineColor = isLocked ? 0x444444 : (isStarlightNoir ? 0xffffff : 0x000000);
+                    const outlineSize = isCelShaded ? 1.15 : 1.05;
+
+                    const outlineGeometry = new THREE.SphereGeometry(data.size * outlineSize, 32, 32);
+                    const outlineMaterial = new THREE.MeshBasicMaterial({ color: outlineColor, side: THREE.BackSide, transparent: true, opacity: 1 });
+                    const outline = new THREE.Mesh(outlineGeometry, outlineMaterial);
+                    planetGroup.add(outline);
+
+                    const ringGeometry = new THREE.RingGeometry(data.size * 1.3, data.size * 1.8, 32);
+                    const ringColor = isLocked ? new THREE.Color(0x666666) : (isStarlightNoir || theme === 'blueprintGrid' ? new THREE.Color(0xffffff) : new THREE.Color(color).multiplyScalar(0.4));
+                    const ringMaterial = new THREE.MeshToonMaterial({ color: ringColor, side: THREE.DoubleSide, transparent: true, opacity: 1 });
+                    const ring = new THREE.Mesh(ringGeometry, ringMaterial);
+                    ring.rotation.x = Math.PI / 2 + (Math.random() - 0.5) * 0.5;
+                    ring.rotation.y = (Math.random() - 0.5) * 0.5;
+                    planetGroup.add(ring);
+
+                    const ringGeometry2 = new THREE.RingGeometry(data.size * 1.9, data.size * 2.1, 32);
+                    const ringColor2 = isLocked ? new THREE.Color(0x777777) : (isStarlightNoir || theme === 'blueprintGrid' ? new THREE.Color(0xffffff) : new THREE.Color(color).multiplyScalar(0.6));
+                    const ringMaterial2 = new THREE.MeshToonMaterial({ color: ringColor2, side: THREE.DoubleSide, transparent: true, opacity: 1 });
+                    const ring2 = new THREE.Mesh(ringGeometry2, ringMaterial2);
+                    ring2.rotation.x = ring.rotation.x;
+                    ring2.rotation.y = ring.rotation.y;
+                    planetGroup.add(ring2);
+
+                    planetGroup.position.copy(data.pos);
+                    return planetGroup;
                 }
 
-                if (currentView !== 'home') {
-                    const currentViewEl = document.getElementById(currentView + '-view');
-                    const contentToHide = currentViewEl.querySelector('.content-bar, #practice-game-container');
-                    if (contentToHide) {
-                        contentToHide.classList.replace('animate__fadeIn', 'animate__fadeOut');
-                        setTimeout(() => currentViewEl.style.display = 'none', 500);
-                    } else {
-                        currentViewEl.style.display = 'none';
+                function resetAndRebuildScene() {
+                    while (planetSystem.children.length > 0) {
+                        planetSystem.remove(planetSystem.children[0]);
                     }
+                    planets.length = 0;
+
+                    planetUnlockOrder.forEach(name => {
+                        const planetGroup = createPlanet({ name, ...planetData[name] }, scene);
+                        planets.push(planetGroup);
+                        planetSystem.add(planetGroup);
+                    });
                 }
-
-                const homeHeader = document.getElementById('home-header');
-                const topMenu = document.querySelector('.top-menu');
-                const rightInfoPanel = document.getElementById('right-info-panel');
-                if (newView === 'home') {
-                    homeHeader.style.display = 'block';
-                    topMenu.style.top = '120px';
-                    homePrompt.style.opacity = 1;
-                    if (rightInfoPanel) rightInfoPanel.style.opacity = '1';
-                } else {
-                    homeHeader.style.display = 'none';
-                    topMenu.style.top = '20px';
-                    homePrompt.style.opacity = 0;
-                    if (rightInfoPanel) rightInfoPanel.style.opacity = '0';
-                }
-
-                if (newView === 'home') {
-                    planetSystem.visible = true;
-                    stars.visible = true;
-                    planetSystem.traverse(child => { if (child.material) new TWEEN.Tween(child.material).to({ opacity: 1 }, 500).start(); });
-                } else {
-                    if (newView !== 'practice') { // Hide planets for shop/settings
-                        planetSystem.traverse(child => { if (child.material) new TWEEN.Tween(child.material).to({ opacity: 0 }, 500).start(); });
-                        setTimeout(() => planetSystem.visible = false, 500);
-                    } else if (wasPractice) { // If coming FROM practice, planets are already hidden.
-                        planetSystem.visible = false;
-                    }
-
-
-                    const newViewEl = document.getElementById(newView + '-view');
-                    newViewEl.style.display = 'flex';
-
-                    if (newView === 'shop' && !isShopInitialized) {
-                        createDemoPlanet('demo-roseate', 'roseateSphere', 'Orange');
-                        createDemoPlanet('demo-red', 'rubyRadiance', 'Green');
-                        createDemoPlanet('demo-orange', 'orangeOasis', 'Orange');
-                        createDemoPlanet('demo-yellow', 'goldenGalaxy', 'Orange');
-                        createDemoPlanet('demo-green', 'emeraldExpanse', 'Red');
-                        createDemoPlanet('demo-blue', 'sapphireSphere', 'Pink');
-                        createDemoPlanet('demo-violet', 'violetVortex', 'Orange');
-                        createDemoPlanet('demo-default', 'default', 'Blue');
-                        createDemoPlanet('demo-noir', 'starlightNoir', 'Purple');
-                        createDemoPlanet('demo-nebula', 'nebulaBurst', 'Pink');
-                        createDemoPlanet('demo-blueprint', 'blueprintGrid', 'Blue');
-                        createDemoPlanet('demo-molten', 'moltenCore', 'Red');
-                        createDemoPlanet('demo-crystalline', 'crystalline', 'Green');
-                        createDemoPlanet('demo-cel', 'celShaded', 'Orange');
-                        isShopInitialized = true;
-                    }
-
-                    if (newView === 'practice') {
-                        initPracticeGame();
-                        startPracticeGame(); // Automatically start the game
-                        planetSystem.visible = false;
-                        stars.visible = false;
-                    } else {
-                        stars.visible = true;
-                    }
-
-                    const contentToShow = newViewEl.querySelector('.content-bar, #practice-game-container');
-                    if (contentToShow) {
-                        contentToShow.className = contentToShow.className.replace(' animate__fadeOut', '') + ' animate__animated animate__fadeIn';
-                    }
-                }
-
-                document.querySelector(`.menu-item.active`).classList.remove('active');
-                document.querySelector(`.menu-item[data-view="${newView}"]`).classList.add('active');
-                currentView = newView;
-            }
-
-            function updateCreditDisplay() {
-                const coinSVG = `<svg width="24" height="24" viewBox="0 0 24 24" style="margin-right: 8px;">
-                                    <circle cx="12" cy="12" r="10" fill="#ffd700" stroke="#b8860b" stroke-width="2"></circle>
-                                    <text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="12" font-weight="bold" fill="#b8860b">$</text>
-                                </svg>`;
-                document.querySelector('.credit-display').innerHTML = `${coinSVG} ${credits}`;
-            }
-
-            function updateShopUI() {
-                document.querySelectorAll('.theme-item').forEach(item => {
-                    const actionButton = item.querySelector('.action-button');
-                    if (!actionButton) return;
-
-                    const theme = actionButton.dataset.theme;
-                    const costEl = item.querySelector('.theme-cost');
-
-                    if (theme === activeTheme) {
-                        actionButton.textContent = 'Equipped';
-                        actionButton.classList.add('equipped');
-                        actionButton.disabled = true;
-                        if (costEl) costEl.style.display = 'none';
-                    } else if (purchasedThemes.has(theme)) {
-                        actionButton.textContent = 'Equip';
-                        actionButton.classList.remove('equipped', 'disabled');
-                        actionButton.disabled = false;
-                        if (costEl) costEl.style.display = 'none';
-                    } else { // Not purchased
-                        actionButton.textContent = 'Buy';
-                        actionButton.classList.remove('equipped');
-                        const cost = parseInt(actionButton.dataset.cost);
-                        actionButton.disabled = credits < cost;
-                        if (actionButton.disabled) {
-                            actionButton.classList.add('disabled');
-                        } else {
-                            actionButton.classList.remove('disabled');
-                        }
-
-                        if (costEl) {
-                            costEl.textContent = `${cost} Credits`;
-                            costEl.style.display = 'block';
-                        }
-                    }
-                });
-            }
-
-            function applyTheme(themeName) {
-                if (activeTheme === themeName) return;
-                activeTheme = themeName;
-
-                // NEW: Apply UI Theme
-                const ui = themeUI[themeName] || themeUI['default'];
-                const header = document.getElementById('home-header');
-                const title = document.querySelector('#home-header h1');
-
-                if (header) header.style.background = ui.header;
-                if (title) title.style.backgroundImage = ui.text;
-
-                resetAndRebuildScene();
-                updateShopUI();
-            }
-
-            function startDemo(themeName) {
-                const demoContainer = document.getElementById('demo-container');
-                demoContainer.innerHTML = '';
-                demoContainer.style.display = 'block';
-
-                demoState.scene = new THREE.Scene();
-                demoState.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-                demoState.renderer = new THREE.WebGLRenderer({ antialias: true });
-                demoState.renderer.setSize(window.innerWidth, window.innerHeight);
-                demoContainer.appendChild(demoState.renderer.domElement);
-
-                const exitBtn = document.createElement('button');
-                exitBtn.id = 'exit-demo-button';
-                exitBtn.className = 'theme-button';
-                exitBtn.textContent = 'Exit Demo';
-                exitBtn.addEventListener('click', exitDemoMode);
-                demoContainer.appendChild(exitBtn);
-
-                const demoAmbient = new THREE.AmbientLight(0xffffff, 0.7);
-                demoState.scene.add(demoAmbient);
-                const demoPoint = new THREE.PointLight(0xffffff, 1);
-                demoPoint.position.set(10, 10, 10);
-                demoState.scene.add(demoPoint);
-
-                demoState.planets = [];
-                planetUnlockOrder.forEach(name => {
-                    const planetGroup = createPlanet({ name, ...planetData[name] }, demoState.scene, themeName);
-                    demoState.planets.push(planetGroup);
-                    demoState.scene.add(planetGroup);
-                });
 
                 const starVertices = [];
                 for (let i = 0; i < 10000; i++) starVertices.push(THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000));
                 const starGeometry = new THREE.BufferGeometry();
                 starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
                 const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, opacity: 1 });
-                demoState.stars = new THREE.Points(starGeometry, starMaterial);
-                demoState.scene.add(demoState.stars);
+                const stars = new THREE.Points(starGeometry, starMaterial);
+                scene.add(stars);
 
-                demoState.camera.position.copy(originalCameraPos);
+                const raycaster = new THREE.Raycaster();
+                const mouse = new THREE.Vector2();
 
-                document.querySelector('.top-menu').style.opacity = 0;
+                const tooltip = document.getElementById('planet-tooltip');
 
-                function animateDemoScene() {
-                    demoState.animationFrameId = requestAnimationFrame(animateDemoScene);
-                    demoState.planets.forEach(p => p.rotation.y += 0.002);
-                    if (demoState.stars) {
-                        demoState.stars.material.opacity = Math.abs(Math.sin(Date.now() * 0.0005 * 0.7)) * 0.2 + 0.8;
+                function animate() {
+                    requestAnimationFrame(animate);
+                    TWEEN.update();
+
+                    renderer.setClearColor(0x000000, currentView === 'home' && !isZoomed ? 1 : 0);
+
+                    if (!isDragging && !isZoomed && currentView === 'home') {
+                        raycaster.setFromCamera(mouse, camera);
+                        const planetMeshes = planets.map(p => p.children[0]);
+                        const intersects = raycaster.intersectObjects(planetMeshes);
+                        const newHoveredPlanet = intersects.length > 0 ? intersects[0].object.parent : null;
+
+                        if (hoveredPlanet !== newHoveredPlanet) {
+                            if (hoveredPlanet) {
+                                new TWEEN.Tween(hoveredPlanet.scale).to({ x: 1, y: 1, z: 1 }, 300).easing(TWEEN.Easing.Quadratic.Out).start();
+                                hideTooltip();
+                            }
+                            if (newHoveredPlanet) {
+                                new TWEEN.Tween(newHoveredPlanet.scale).to({ x: 1.1, y: 1.1, z: 1.1 }, 300).easing(TWEEN.Easing.Quadratic.Out).start();
+                                showPlanetTooltip(newHoveredPlanet);
+                            }
+                            hoveredPlanet = newHoveredPlanet;
+                        }
+                        canvasContainer.style.cursor = newHoveredPlanet && languageProgress[currentLanguage].unlockedPlanets.has(newHoveredPlanet.userData.name) ? 'pointer' : 'default';
                     }
-                    demoState.renderer.render(demoState.scene, demoState.camera);
+
+                    planets.forEach(p => { p.rotation.y += 0.002; });
+
+                    if (!isZoomed && TWEEN.getAll().length === 0) {
+                        stars.material.opacity = Math.abs(Math.sin(Date.now() * 0.0005 * 0.7)) * 0.2 + 0.8;
+                    }
+                    renderer.render(scene, camera);
                 }
-                animateDemoScene();
-            }
 
-            function exitDemoMode() {
-                if (demoState.animationFrameId) {
-                    cancelAnimationFrame(demoState.animationFrameId);
+
+
+                function initializeState() {
+                    if (!userStats.languageProgress) {
+                        userStats.languageProgress = {};
+                    }
+
+                    // Ensure ALL supported languages exist in userStats, not just what was saved
+                    Object.keys(languageNames).forEach(lang => {
+                        if (!userStats.languageProgress[lang]) {
+                            userStats.languageProgress[lang] = {
+                                unlockedPlanets: new Set(['Orange']), // Default Start Planet
+                                completedSections: {}
+                            };
+                        } else {
+                            // Rehydrate existing data
+                            const lp = userStats.languageProgress[lang];
+                            if (Array.isArray(lp.unlockedPlanets)) {
+                                lp.unlockedPlanets = new Set(lp.unlockedPlanets);
+                            } else if (!lp.unlockedPlanets) {
+                                lp.unlockedPlanets = new Set(['Orange']);
+                            }
+                            if (!lp.completedSections) lp.completedSections = {};
+                        }
+                    });
+
+                    // Link global variable
+                    languageProgress = userStats.languageProgress;
                 }
-                const demoContainer = document.getElementById('demo-container');
-                demoContainer.style.display = 'none';
-                demoContainer.innerHTML = '';
 
-                demoState = { scene: null, camera: null, renderer: null, planets: [], stars: null, animationFrameId: null };
-                document.querySelector('.top-menu').style.opacity = 1;
-            }
+                function switchLanguage(newLang) {
+                    if (newLang === currentLanguage) return;
 
-            function showPlanetTooltip(planet) {
-                const planetName = planet.userData.name;
-                const topic = planetTopics[planetName];
-                const isLocked = !languageProgress[currentLanguage].unlockedPlanets.has(planetName);
+                    currentLanguage = newLang;
 
-                if (isLocked) {
-                    tooltip.innerHTML = `<h4 style="color: #999999; margin-bottom: 0;">${topic}</h4>`;
-                } else {
+                    updateCreditDisplay();
+                    updateShopUI();
+                    document.getElementById('current-language-btn').textContent = languageNames[newLang];
+
+                    // NEW: Update Stats Indicator
+                    const flagMap = { es: 'es.svg', fr: 'fr.svg', hi: 'in.svg' };
+                    document.getElementById('lang-flag-icon').src = `svg/${flagMap[newLang]}`;
+                    document.getElementById('lang-name-label').textContent = languageNames[newLang];
+
+                    resetAndRebuildScene();
+                }
+
+                initializeState();
+                applyTheme(userStats.activeTheme);
+                window.addEventListener('endQuiz', (e) => {
+                    const appContainer = document.getElementById('app-container');
+                    appContainer.style.display = 'block';
+                    requestAnimationFrame(() => { appContainer.style.opacity = '1'; });
+
+                    if (!e.detail) return;
+                    const { isWin, isAlreadyCompleted, sectionNumber, planetName, correctCount, totalCount, learnedWords } = e.detail;
+
+                    if (isWin) {
+                        userStats.totalQuestions = (userStats.totalQuestions || 0) + totalCount;
+                        userStats.correctAnswers = (userStats.correctAnswers || 0) + correctCount;
+
+                        if (Array.isArray(learnedWords)) {
+                            if (!userStats.learnedLog) userStats.learnedLog = [];
+                            learnedWords.forEach(word => {
+                                if (!userStats.learnedLog.includes(word)) {
+                                    userStats.learnedLog.push(word);
+                                }
+                            });
+                            userStats.wordsLearned = userStats.learnedLog.length;
+                        }
+
+                        if (!isAlreadyCompleted) {
+                            if (!languageProgress[currentLanguage].completedSections[planetName]) {
+                                languageProgress[currentLanguage].completedSections[planetName] = [];
+                            }
+                            if (!languageProgress[currentLanguage].completedSections[planetName].includes(sectionNumber)) {
+                                languageProgress[currentLanguage].completedSections[planetName].push(sectionNumber);
+                                userStats.totalSectionsCompleted = (userStats.totalSectionsCompleted || 0) + 1;
+                            }
+
+                            if (languageProgress[currentLanguage].completedSections[planetName].length >= 5) {
+                                const currentIndex = planetUnlockOrder.indexOf(planetName);
+                                if (currentIndex >= 0 && currentIndex < planetUnlockOrder.length - 1) {
+                                    const nextPlanet = planetUnlockOrder[currentIndex + 1];
+                                    unlockPlanet(nextPlanet);
+                                }
+                            }
+                        }
+
+                        saveStats();
+                        updateRightPanelStats();
+                        updateRewardUI();
+                    }
+                    resetAndRebuildScene();
+                });
+
+                animate();
+
+                updateCreditDisplay();
+                updateShopUI();
+
+                function onMouseDown(event) {
+                    if (isZoomed || currentView !== 'home') return;
+
+                    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                    dragStartPos.set(event.clientX, event.clientY);
+
+                    raycaster.setFromCamera(mouse, camera);
+                    const allPlanetMeshes = planets.map(p => p.children[0]);
+                    const intersects = raycaster.intersectObjects(allPlanetMeshes);
+
+                    if (intersects.length > 0) {
+                        draggedPlanet = intersects[0].object.parent;
+                        canvasContainer.style.cursor = 'grabbing';
+                    }
+                }
+
+                function onMouseMove(event) {
+                    mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                    mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+                    if (draggedPlanet) {
+                        const dragEndPos = new THREE.Vector2(event.clientX, event.clientY);
+                        if (dragStartPos.distanceTo(dragEndPos) > 15) { // Increased threshold
+                            isDragging = true;
+                            if (hoveredPlanet) {
+                                new TWEEN.Tween(hoveredPlanet.scale).to({ x: 1, y: 1, z: 1 }, 100).start();
+                                hoveredPlanet = null;
+                            }
+                            hideTooltip();
+                        }
+
+                        if (isDragging) {
+                            const vector = new THREE.Vector3(mouse.x, mouse.y, 0.5);
+                            vector.unproject(camera);
+                            const dir = vector.sub(camera.position).normalize();
+                            const distance = (draggedPlanet.position.z - camera.position.z) / dir.z;
+                            const pos = camera.position.clone().add(dir.multiplyScalar(distance));
+
+                            const vFOV = THREE.MathUtils.degToRad(camera.fov);
+                            const distFromCamera = camera.position.z - draggedPlanet.position.z;
+                            const height = 2 * Math.tan(vFOV / 2) * distFromCamera;
+                            const width = height * camera.aspect;
+                            const selfRadius = draggedPlanet.userData.size * 2.1;
+
+                            const minX = -width / 2 + selfRadius;
+                            const maxX = 0 - selfRadius;
+                            const minY = -height / 2 + selfRadius;
+
+                            const topBorderY = height / 2 - (180 / window.innerHeight) * height;
+                            const maxY = topBorderY - selfRadius;
+
+                            const proposedX = Math.max(minX, Math.min(maxX, pos.x));
+                            const proposedY = Math.max(minY, Math.min(maxY, pos.y));
+
+                            const proposedPosition = new THREE.Vector3(proposedX, proposedY, draggedPlanet.position.z);
+                            let collision = false;
+
+                            for (const planet of planets) {
+                                if (planet === draggedPlanet) continue;
+                                if (proposedPosition.distanceTo(planet.position) < selfRadius + planet.userData.size * 2.1) {
+                                    collision = true;
+                                    break;
+                                }
+                            }
+
+                            if (!collision) {
+                                draggedPlanet.position.x = proposedX;
+                                draggedPlanet.position.y = proposedY;
+                            }
+                        }
+                    }
+                }
+
+                function onMouseUp(event) {
+                    if (isZoomed || currentView !== 'home') return;
+
+                    if (!isDragging) {
+                        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+                        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+                        raycaster.setFromCamera(mouse, camera);
+                        const allPlanetMeshes = planets.map(p => p.children[0]);
+                        const intersects = raycaster.intersectObjects(allPlanetMeshes);
+
+                        if (intersects.length > 0) {
+                            const clickedPlanet = intersects[0].object.parent;
+                            if (languageProgress[currentLanguage].unlockedPlanets.has(clickedPlanet.userData.name)) {
+                                showSectionModal(clickedPlanet);
+                            } else {
+                                const popup = document.getElementById('locked-planet-popup');
+                                if (popup) {
+                                    popup.style.display = 'block';
+                                    setTimeout(() => { popup.style.display = 'none'; }, 2000);
+                                }
+                            }
+                        }
+                    }
+
+                    draggedPlanet = null;
+                    isDragging = false;
+                    canvasContainer.style.cursor = 'default';
+                }
+
+                function startLesson(planet, sectionIndex) {
+                    const planetName = planet.userData.name;
                     const planetSections = languageProgress[currentLanguage].completedSections[planetName] || [];
-                    const progress = (planetSections.length / 5) * 100;
+                    const isAlreadyCompleted = planetSections.includes(sectionIndex + 1);
 
-                    const planetColorHex = themePalettes[activeTheme][planetName];
-                    const planetThreeColor = new THREE.Color(planetColorHex);
-                    const colorString = `#${planetThreeColor.getHexString()}`;
-                    const luminance = (0.299 * planetThreeColor.r + 0.587 * planetThreeColor.g + 0.114 * planetThreeColor.b);
-                    const isDark = luminance < 0.4;
-                    const textColor = isDark ? '#FFFFFF' : colorString;
+                    const appContainer = document.getElementById('app-container');
+                    appContainer.style.opacity = '0';
+                    setTimeout(() => { appContainer.style.display = 'none'; }, 500);
 
-                    tooltip.innerHTML = `
+                    const event = new CustomEvent('startQuiz', {
+                        detail: {
+                            color: `#${new THREE.Color(themePalettes[userStats.activeTheme][planetName]).getHexString()}`,
+                            planetName: planet.userData.name,
+                            lang: currentLanguage,
+                            sectionIndex: sectionIndex,
+                            isAlreadyCompleted: isAlreadyCompleted
+                        }
+                    });
+                    window.dispatchEvent(event);
+                }
+
+                function zoomOut() {
+                    isZoomed = false;
+                    targetPlanet = null;
+                    const appContainer = document.getElementById('app-container');
+                    appContainer.style.display = 'block';
+                    setTimeout(() => { appContainer.style.opacity = '1'; }, 10);
+
+                    planetSystem.traverse(child => { if (child.material) { child.visible = true; new TWEEN.Tween(child.material).to({ opacity: 1 }, 1200).start(); } });
+                    stars.visible = true;
+                    new TWEEN.Tween(stars.material).to({ opacity: 1 }, 1200).start();
+                    new TWEEN.Tween(camera.position).to(originalCameraPos, 1200).start();
+                    new TWEEN.Tween(scene.background).to(new THREE.Color(0x000000), 1200).start();
+                    document.querySelector('.top-menu').style.opacity = 1;
+                }
+
+                function unlockPlanet(planetName) {
+                    languageProgress[currentLanguage].unlockedPlanets.add(planetName);
+                    resetAndRebuildScene(); // Rebuild to show unlocked state
+                }
+
+                function switchView(newView) {
+                    if (newView === currentView) return;
+
+                    const homePrompt = document.getElementById('home-prompt');
+                    hideTooltip();
+
+                    const wasPractice = currentView === 'practice';
+                    if (wasPractice && typeof stopPracticeGame === 'function') {
+                        stopPracticeGame();
+                    }
+
+                    if (currentView !== 'home') {
+                        const currentViewEl = document.getElementById(currentView + '-view');
+                        const contentToHide = currentViewEl.querySelector('.content-bar, #practice-game-container');
+                        if (contentToHide) {
+                            contentToHide.classList.replace('animate__fadeIn', 'animate__fadeOut');
+                            setTimeout(() => currentViewEl.style.display = 'none', 500);
+                        } else {
+                            currentViewEl.style.display = 'none';
+                        }
+                    }
+
+                    const homeHeader = document.getElementById('home-header');
+                    const topMenu = document.querySelector('.top-menu');
+                    const rightInfoPanel = document.getElementById('right-info-panel');
+                    if (newView === 'home') {
+                        homeHeader.style.display = 'block';
+                        topMenu.style.top = '120px';
+                        homePrompt.style.opacity = 1;
+                        if (rightInfoPanel) rightInfoPanel.style.opacity = '1';
+                    } else {
+                        homeHeader.style.display = 'none';
+                        topMenu.style.top = '20px';
+                        homePrompt.style.opacity = 0;
+                        if (rightInfoPanel) rightInfoPanel.style.opacity = '0';
+                    }
+
+                    if (newView === 'home') {
+                        planetSystem.visible = true;
+                        stars.visible = true;
+                        planetSystem.traverse(child => { if (child.material) new TWEEN.Tween(child.material).to({ opacity: 1 }, 500).start(); });
+                    } else {
+                        if (newView !== 'practice') { // Hide planets for shop/settings
+                            planetSystem.traverse(child => { if (child.material) new TWEEN.Tween(child.material).to({ opacity: 0 }, 500).start(); });
+                            setTimeout(() => planetSystem.visible = false, 500);
+                        } else if (wasPractice) { // If coming FROM practice, planets are already hidden.
+                            planetSystem.visible = false;
+                        }
+
+
+                        const newViewEl = document.getElementById(newView + '-view');
+                        newViewEl.style.display = 'flex';
+
+                        if (newView === 'shop' && !isShopInitialized) {
+                            createDemoPlanet('demo-roseate', 'roseateSphere', 'Orange');
+                            createDemoPlanet('demo-red', 'rubyRadiance', 'Green');
+                            createDemoPlanet('demo-orange', 'orangeOasis', 'Orange');
+                            createDemoPlanet('demo-yellow', 'goldenGalaxy', 'Orange');
+                            createDemoPlanet('demo-green', 'emeraldExpanse', 'Red');
+                            createDemoPlanet('demo-blue', 'sapphireSphere', 'Pink');
+                            createDemoPlanet('demo-violet', 'violetVortex', 'Orange');
+                            createDemoPlanet('demo-default', 'default', 'Blue');
+                            createDemoPlanet('demo-noir', 'starlightNoir', 'Purple');
+                            createDemoPlanet('demo-nebula', 'nebulaBurst', 'Pink');
+                            createDemoPlanet('demo-blueprint', 'blueprintGrid', 'Blue');
+                            createDemoPlanet('demo-molten', 'moltenCore', 'Red');
+                            createDemoPlanet('demo-crystalline', 'crystalline', 'Green');
+                            createDemoPlanet('demo-cel', 'celShaded', 'Orange');
+                            isShopInitialized = true;
+                        }
+
+                        if (newView === 'practice') {
+                            initPracticeGame();
+                            startPracticeGame(); // Automatically start the game
+                            planetSystem.visible = false;
+                            stars.visible = false;
+                        } else {
+                            stars.visible = true;
+                        }
+
+                        const contentToShow = newViewEl.querySelector('.content-bar, #practice-game-container');
+                        if (contentToShow) {
+                            contentToShow.className = contentToShow.className.replace(' animate__fadeOut', '') + ' animate__animated animate__fadeIn';
+                        }
+                    }
+
+                    document.querySelector(`.menu-item.active`).classList.remove('active');
+                    document.querySelector(`.menu-item[data-view="${newView}"]`).classList.add('active');
+                    currentView = newView;
+                }
+
+                function updateCreditDisplay() {
+                    const coinSVG = `<svg width="24" height="24" viewBox="0 0 24 24" style="margin-right: 8px;">
+                                    <circle cx="12" cy="12" r="10" fill="#ffd700" stroke="#b8860b" stroke-width="2"></circle>
+                                    <text x="50%" y="50%" text-anchor="middle" dy=".3em" font-size="12" font-weight="bold" fill="#b8860b">$</text>
+                                </svg>`;
+                    document.querySelector('.credit-display').innerHTML = `${coinSVG} ${userStats.credits}`;
+                }
+
+                function updateShopUI() {
+                    document.querySelectorAll('.theme-item').forEach(item => {
+                        const actionButton = item.querySelector('.action-button');
+                        if (!actionButton) return;
+
+                        const theme = actionButton.dataset.theme;
+                        const costEl = item.querySelector('.theme-cost');
+
+                        if (theme === userStats.activeTheme) {
+                            actionButton.textContent = 'Equipped';
+                            actionButton.classList.add('equipped');
+                            actionButton.disabled = true;
+                            if (costEl) costEl.style.display = 'none';
+                        } else if (userStats.purchasedThemes.includes(theme)) {
+                            actionButton.textContent = 'Equip';
+                            actionButton.classList.remove('equipped', 'disabled');
+                            actionButton.disabled = false;
+                            if (costEl) costEl.style.display = 'none';
+                        } else { // Not purchased
+                            actionButton.textContent = 'Buy';
+                            actionButton.classList.remove('equipped');
+                            const cost = parseInt(actionButton.dataset.cost);
+                            actionButton.disabled = userStats.credits < cost;
+                            if (actionButton.disabled) {
+                                actionButton.classList.add('disabled');
+                            } else {
+                                actionButton.classList.remove('disabled');
+                            }
+
+                            if (costEl) {
+                                costEl.textContent = `${cost} Credits`;
+                                costEl.style.display = 'block';
+                            }
+                        }
+                    });
+                }
+
+                function applyTheme(themeName) {
+                    if (userStats.activeTheme === themeName && themeName !== 'default') {
+                        // Force re-apply only on init, but logic check handles it
+                    }
+                    userStats.activeTheme = themeName;
+                    saveStats();
+
+                    // NEW: Apply UI Theme
+                    const ui = themeUI[themeName] || themeUI['default'];
+                    const header = document.getElementById('home-header');
+                    const title = document.querySelector('#home-header h1');
+
+                    if (header) header.style.background = ui.header;
+                    if (title) {
+                        title.style.background = ui.text;
+                        title.style.webkitBackgroundClip = 'text';
+                        title.style.backgroundClip = 'text';
+                        title.style.color = 'transparent';
+                    }
+
+                    resetAndRebuildScene();
+                    updateShopUI();
+                }
+
+                function startDemo(themeName) {
+                    const demoContainer = document.getElementById('demo-container');
+                    demoContainer.innerHTML = '';
+                    demoContainer.style.display = 'block';
+
+                    demoState.scene = new THREE.Scene();
+                    demoState.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+                    demoState.renderer = new THREE.WebGLRenderer({ antialias: true });
+                    demoState.renderer.setSize(window.innerWidth, window.innerHeight);
+                    demoContainer.appendChild(demoState.renderer.domElement);
+
+                    // Hide main UI
+                    document.getElementById('home-header').style.display = 'none';
+                    document.getElementById('right-info-panel').style.opacity = '0';
+                    document.querySelector('.top-menu').style.opacity = '0';
+
+                    const exitBtn = document.createElement('button');
+                    exitBtn.id = 'exit-demo-button';
+                    exitBtn.className = 'theme-button';
+                    exitBtn.textContent = 'Exit Demo';
+                    exitBtn.addEventListener('click', exitDemoMode);
+                    demoContainer.appendChild(exitBtn);
+
+                    const demoAmbient = new THREE.AmbientLight(0xffffff, 0.7);
+                    demoState.scene.add(demoAmbient);
+                    const demoPoint = new THREE.PointLight(0xffffff, 1);
+                    demoPoint.position.set(10, 10, 10);
+                    demoState.scene.add(demoPoint);
+
+                    demoState.planets = [];
+                    planetUnlockOrder.forEach(name => {
+                        const data = demoPlanetData[name]; // USE DEMO DATA
+                        // Note: createPlanet expects 'data' to have .name too, so we add it manually or spread it
+                        const planetGroup = createPlanet({ name, ...data }, demoState.scene, themeName);
+                        demoState.planets.push(planetGroup);
+                        demoState.scene.add(planetGroup);
+                    });
+
+                    const starVertices = [];
+                    for (let i = 0; i < 10000; i++) starVertices.push(THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000), THREE.MathUtils.randFloatSpread(2000));
+                    const starGeometry = new THREE.BufferGeometry();
+                    starGeometry.setAttribute('position', new THREE.Float32BufferAttribute(starVertices, 3));
+                    const starMaterial = new THREE.PointsMaterial({ color: 0xffffff, size: 0.1, transparent: true, opacity: 1 });
+                    demoState.stars = new THREE.Points(starGeometry, starMaterial);
+                    demoState.scene.add(demoState.stars);
+
+                    demoState.camera.position.copy(originalCameraPos);
+
+                    document.querySelector('.top-menu').style.opacity = 0;
+
+                    function animateDemoScene() {
+                        demoState.animationFrameId = requestAnimationFrame(animateDemoScene);
+                        demoState.planets.forEach(p => p.rotation.y += 0.002);
+                        if (demoState.stars) {
+                            demoState.stars.material.opacity = Math.abs(Math.sin(Date.now() * 0.0005 * 0.7)) * 0.2 + 0.8;
+                        }
+                        demoState.renderer.render(demoState.scene, demoState.camera);
+                    }
+                    animateDemoScene();
+                }
+
+                function exitDemoMode() {
+                    if (demoState.animationFrameId) {
+                        cancelAnimationFrame(demoState.animationFrameId);
+                    }
+                    const demoContainer = document.getElementById('demo-container');
+                    demoContainer.style.display = 'none';
+                    demoContainer.innerHTML = '';
+
+                    demoState = { scene: null, camera: null, renderer: null, planets: [], stars: null, animationFrameId: null };
+
+                    // Restore UI
+                    if (currentView === 'home') {
+                        document.getElementById('home-header').style.display = 'block';
+                        document.getElementById('right-info-panel').style.opacity = '1';
+                    } else {
+                        // If we were in shop/settings, header/panel stay hidden, but menu returns
+                    }
+                    document.querySelector('.top-menu').style.opacity = '1';
+                }
+
+                function showPlanetTooltip(planet) {
+                    const planetName = planet.userData.name;
+                    const topic = planetTopics[planetName];
+                    const isLocked = !languageProgress[currentLanguage].unlockedPlanets.has(planetName);
+
+                    if (isLocked) {
+                        tooltip.innerHTML = `<h4 style="color: #999999; margin-bottom: 0;">${topic}</h4>`;
+                    } else {
+                        const planetSections = languageProgress[currentLanguage].completedSections[planetName] || [];
+                        const progress = (planetSections.length / 5) * 100;
+
+                        const planetColorHex = themePalettes[activeTheme][planetName];
+                        const planetThreeColor = new THREE.Color(planetColorHex);
+                        const colorString = `#${planetThreeColor.getHexString()}`;
+                        const luminance = (0.299 * planetThreeColor.r + 0.587 * planetThreeColor.g + 0.114 * planetThreeColor.b);
+                        const isDark = luminance < 0.4;
+                        const textColor = isDark ? '#FFFFFF' : colorString;
+
+                        tooltip.innerHTML = `
                         <h4 style="color: ${textColor};">${topic}</h4>
                         <div class="progress-bar">
                             <div class="progress-bar-inner" style="width: ${progress}%; background-color: ${colorString};"></div>
                         </div>
                     `;
+                    }
+
+                    tooltip.style.left = `${(mouse.x + 1) / 2 * window.innerWidth + 20}px`;
+                    tooltip.style.top = `${(-mouse.y + 1) / 2 * window.innerHeight - 40}px`;
+                    tooltip.style.opacity = 1;
                 }
 
-                tooltip.style.left = `${(mouse.x + 1) / 2 * window.innerWidth + 20}px`;
-                tooltip.style.top = `${(-mouse.y + 1) / 2 * window.innerHeight - 40}px`;
-                tooltip.style.opacity = 1;
-            }
+                function hideTooltip() {
+                    tooltip.style.opacity = 0;
+                }
 
-            function hideTooltip() {
-                tooltip.style.opacity = 0;
-            }
+                const modalOverlay = document.getElementById('section-modal-overlay');
+                function showSectionModal(planet) {
+                    document.getElementById('home-prompt').style.opacity = 0;
+                    hideTooltip();
+                    const planetName = planet.userData.name;
+                    const planetSections = languageProgress[currentLanguage].completedSections[planetName] || [];
+                    const color = `#${new THREE.Color(themePalettes[userStats.activeTheme][planetName]).getHexString()}`;
 
-            const modalOverlay = document.getElementById('section-modal-overlay');
-            function showSectionModal(planet) {
-                document.getElementById('home-prompt').style.opacity = 0;
-                hideTooltip();
-                const planetName = planet.userData.name;
-                const planetSections = languageProgress[currentLanguage].completedSections[planetName] || [];
-                const color = `#${new THREE.Color(themePalettes[activeTheme][planetName]).getHexString()}`;
+                    const pastelColors = ['#b3e2cd', '#fdcdac', '#cbd5e8', '#f4cae4', '#fff2ae'];
 
-                const pastelColors = ['#b3e2cd', '#fdcdac', '#cbd5e8', '#f4cae4', '#fff2ae'];
-
-                let content = `
+                    let content = `
                     <div class="section-modal-content">
                         <button class="section-modal-close">✕</button>
                         <h2 style="color: ${color};">${planetTopics[planetName]}</h2>
                         <div class="section-grid">
                 `;
-                for (let i = 0; i < 5; i++) {
-                    const sectionNum = i + 1;
-                    const isCompleted = planetSections.includes(sectionNum);
-                    const isUnlocked = i === 0 || planetSections.includes(i);
+                    for (let i = 0; i < 5; i++) {
+                        const sectionNum = i + 1;
+                        const isCompleted = planetSections.includes(sectionNum);
+                        const isUnlocked = i === 0 || planetSections.includes(i);
 
-                    let buttonClasses = 'section-button';
-                    let buttonStyle = '';
-                    if (isCompleted) {
-                        buttonClasses += ' completed';
-                        const pastelColor = pastelColors[i % pastelColors.length];
-                        buttonStyle = `style="background-color: ${pastelColor}; border-color: ${pastelColor};"`;
-                    } else if (isUnlocked) {
-                        buttonClasses += ' unlocked';
-                    }
+                        let buttonClasses = 'section-button';
+                        let buttonStyle = '';
+                        if (isCompleted) {
+                            buttonClasses += ' completed';
+                            const pastelColor = pastelColors[i % pastelColors.length];
+                            buttonStyle = `style="background-color: ${pastelColor}; border-color: ${pastelColor};"`;
+                        } else if (isUnlocked) {
+                            buttonClasses += ' unlocked';
+                        }
 
-                    content += `
+                        content += `
                         <button 
                             class="${buttonClasses}"
                             ${isUnlocked ? '' : 'disabled'}
@@ -2669,145 +2907,159 @@
                             SECTION ${sectionNum}
                         </button>
                     `;
-                }
-                content += `</div></div>`;
-                modalOverlay.innerHTML = content;
+                    }
+                    content += `</div></div>`;
+                    modalOverlay.innerHTML = content;
 
-                modalOverlay.querySelector('.section-modal-close').addEventListener('click', hideSectionModal);
-                modalOverlay.querySelectorAll('.section-button').forEach(button => {
-                    if (!button.disabled) {
-                        button.addEventListener('click', () => {
-                            const sectionIndex = parseInt(button.dataset.section);
-                            startLesson(planet, sectionIndex);
-                        });
+                    modalOverlay.querySelector('.section-modal-close').addEventListener('click', hideSectionModal);
+                    modalOverlay.querySelectorAll('.section-button').forEach(button => {
+                        if (!button.disabled) {
+                            button.addEventListener('click', () => {
+                                const sectionIndex = parseInt(button.dataset.section);
+                                startLesson(planet, sectionIndex);
+                            });
+                        }
+                    });
+
+                    modalOverlay.classList.add('visible');
+                }
+
+                function hideSectionModal() {
+                    modalOverlay.classList.remove('visible');
+                    if (currentView === 'home') {
+                        document.getElementById('home-prompt').style.opacity = 1;
+                    }
+                }
+
+                document.getElementById('sign-out-btn').addEventListener('click', () => {
+                    // Clear user session
+                    localStorage.removeItem('arsha_user');
+                    console.log('User signed out.');
+                    window.location.href = 'index.html';
+                });
+
+
+                document.querySelectorAll('.action-button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const theme = button.dataset.theme;
+                        if (userStats.purchasedThemes.includes(theme) || theme === 'default') {
+                            applyTheme(theme);
+                        } else { // Buy
+                            const cost = parseInt(button.dataset.cost);
+                            if (userStats.credits >= cost) {
+                                userStats.credits -= cost;
+                                userStats.purchasedThemes.push(theme);
+                                localStorage.setItem(window.statsKey, JSON.stringify(userStats));
+
+                                updateCreditDisplay();
+                                updateShopUI();
+                                applyTheme(theme); // Equip after buying
+                            }
+                        }
+                    });
+                });
+
+                document.querySelectorAll('.demo-button').forEach(button => {
+                    button.addEventListener('click', () => {
+                        const theme = button.dataset.theme;
+                        startDemo(theme);
+                    });
+                });
+
+                document.querySelectorAll('.menu-item').forEach(item => item.addEventListener('click', (e) => switchView(e.target.dataset.view)));
+
+                document.getElementById('current-language-btn').addEventListener('click', () => {
+                    document.getElementById('language-options').classList.toggle('visible');
+                });
+
+                document.getElementById('language-options').addEventListener('click', (e) => {
+                    if (e.target.tagName === 'A') {
+                        const newLang = e.target.dataset.lang;
+                        switchLanguage(newLang);
+                        document.getElementById('language-options').classList.remove('visible');
                     }
                 });
 
-                modalOverlay.classList.add('visible');
-            }
+                window.addEventListener('lessonCompleted', (e) => {
+                    const { planetName, sectionNumber, isWin, isAlreadyCompleted, correctCount, totalCount, learnedWords } = e.detail;
 
-            function hideSectionModal() {
-                modalOverlay.classList.remove('visible');
-                if (currentView === 'home') {
-                    document.getElementById('home-prompt').style.opacity = 1;
-                }
-            }
+                    // Update Stats
+                    if (correctCount !== undefined) {
+                        userStats.correctAnswers += correctCount;
+                        userStats.totalQuestions += totalCount;
+                    }
 
-            document.getElementById('sign-out-btn').addEventListener('click', () => {
-                // Clear user session
-                localStorage.removeItem('arsha_user');
-                console.log('User signed out.');
-                window.location.href = 'index.html';
-            });
+                    if (learnedWords && learnedWords.length > 0) {
+                        // Use Set to ensure uniqueness in log
+                        const uniqueLog = new Set(userStats.learnedLog || []);
+                        learnedWords.forEach(word => uniqueLog.add(word));
+                        userStats.learnedLog = Array.from(uniqueLog);
+                        userStats.wordsLearned = uniqueLog.size;
+                    } else if (isWin && !isAlreadyCompleted && (!learnedWords || learnedWords.length === 0)) {
+                        // Fallback if learnedWords not sent for some reason, but we shouldn't hit this with new React code
+                        // userStats.wordsLearned += 5; 
+                    }
 
+                    localStorage.setItem(window.statsKey, JSON.stringify(userStats));
+                    updateRightPanelStats();
 
-            document.querySelectorAll('.action-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const theme = button.dataset.theme;
-                    if (purchasedThemes.has(theme) || theme === 'default') {
-                        applyTheme(theme);
-                    } else { // Buy
-                        const cost = parseInt(button.dataset.cost);
-                        if (credits >= cost) {
-                            credits -= cost;
-                            purchasedThemes.add(theme);
+                    if (isWin && !isAlreadyCompleted) {
+                        const currentLangProgress = languageProgress[currentLanguage];
+                        if (!currentLangProgress.completedSections[planetName]) {
+                            currentLangProgress.completedSections[planetName] = [];
+                        }
+                        if (!currentLangProgress.completedSections[planetName].includes(sectionNumber)) {
+                            currentLangProgress.completedSections[planetName].push(sectionNumber);
+                            const creditsEarned = (sectionNumber === 5) ? 100 : 50;
+                            userStats.credits += creditsEarned;
+                            localStorage.setItem(window.statsKey, JSON.stringify(userStats));
                             updateCreditDisplay();
-                            updateShopUI();
-                            applyTheme(theme); // Equip after buying
+
+                            // Increment total sections for rewards
+                            userStats.totalSectionsCompleted = (userStats.totalSectionsCompleted || 0) + 1;
+                            localStorage.setItem(window.statsKey, JSON.stringify(userStats));
+                            updateRewardUI();
+                        }
+
+                        const currentPlanetIndex = planetUnlockOrder.indexOf(planetName);
+                        if ((currentLangProgress.completedSections[planetName]?.length || 0) === 5 && currentPlanetIndex < planetUnlockOrder.length - 1) {
+                            const nextPlanetName = planetUnlockOrder[currentPlanetIndex + 1];
+                            if (!currentLangProgress.unlockedPlanets.has(nextPlanetName)) {
+                                unlockPlanet(nextPlanetName);
+                            }
                         }
                     }
                 });
-            });
-
-            document.querySelectorAll('.demo-button').forEach(button => {
-                button.addEventListener('click', () => {
-                    const theme = button.dataset.theme;
-                    startDemo(theme);
+                window.addEventListener('endQuiz', () => {
+                    const appContainer = document.getElementById('app-container');
+                    appContainer.style.display = 'block';
+                    setTimeout(() => { appContainer.style.opacity = '1'; }, 10);
+                    zoomOut();
                 });
-            });
 
-            document.querySelectorAll('.menu-item').forEach(item => item.addEventListener('click', (e) => switchView(e.target.dataset.view)));
+                window.addEventListener('mousedown', onMouseDown);
+                window.addEventListener('mouseup', onMouseUp);
+                window.addEventListener('mousemove', onMouseMove);
 
-            document.getElementById('current-language-btn').addEventListener('click', () => {
-                document.getElementById('language-options').classList.toggle('visible');
-            });
+            } catch (error) {
+                console.error("Critical error in init:", error);
+                const shouldReset = confirm("An error occurred while loading your profile: " + error.message + "\n\nWould you like to reset your progress to fix this? This cannot be undone.");
 
-            document.getElementById('language-options').addEventListener('click', (e) => {
-                if (e.target.tagName === 'A') {
-                    const newLang = e.target.dataset.lang;
-                    switchLanguage(newLang);
-                    document.getElementById('language-options').classList.remove('visible');
-                }
-            });
-
-            window.addEventListener('lessonCompleted', (e) => {
-                const { planetName, sectionNumber, isWin, isAlreadyCompleted, correctCount, totalCount, learnedWords } = e.detail;
-
-                // Update Stats
-                if (correctCount !== undefined) {
-                    userStats.correctAnswers += correctCount;
-                    userStats.totalQuestions += totalCount;
-                }
-
-                if (learnedWords && learnedWords.length > 0) {
-                    // Use Set to ensure uniqueness in log
-                    const uniqueLog = new Set(userStats.learnedLog || []);
-                    learnedWords.forEach(word => uniqueLog.add(word));
-                    userStats.learnedLog = Array.from(uniqueLog);
-                    userStats.wordsLearned = uniqueLog.size;
-                } else if (isWin && !isAlreadyCompleted && (!learnedWords || learnedWords.length === 0)) {
-                    // Fallback if learnedWords not sent for some reason, but we shouldn't hit this with new React code
-                    // userStats.wordsLearned += 5; 
-                }
-
-                localStorage.setItem(window.statsKey, JSON.stringify(userStats));
-                updateRightPanelStats();
-
-                if (isWin && !isAlreadyCompleted) {
-                    const currentLangProgress = languageProgress[currentLanguage];
-                    if (!currentLangProgress.completedSections[planetName]) {
-                        currentLangProgress.completedSections[planetName] = [];
+                if (shouldReset) {
+                    if (window.statsKey) {
+                        localStorage.removeItem(window.statsKey);
                     }
-                    if (!currentLangProgress.completedSections[planetName].includes(sectionNumber)) {
-                        currentLangProgress.completedSections[planetName].push(sectionNumber);
-                        const creditsEarned = (sectionNumber === 5) ? 100 : 50;
-                        credits += creditsEarned;
-                        updateCreditDisplay();
-
-                        // Increment total sections for rewards
-                        userStats.totalSectionsCompleted = (userStats.totalSectionsCompleted || 0) + 1;
-                        localStorage.setItem(window.statsKey, JSON.stringify(userStats));
-                        updateRewardUI();
-                    }
-
-                    const currentPlanetIndex = planetUnlockOrder.indexOf(planetName);
-                    if ((currentLangProgress.completedSections[planetName]?.length || 0) === 5 && currentPlanetIndex < planetUnlockOrder.length - 1) {
-                        const nextPlanetName = planetUnlockOrder[currentPlanetIndex + 1];
-                        if (!currentLangProgress.unlockedPlanets.has(nextPlanetName)) {
-                            unlockPlanet(nextPlanetName);
-                        }
-                    }
+                    localStorage.removeItem('arsha_user');
+                    alert("Progress reset. Please sign in again.");
+                    window.location.href = 'index.html';
+                } else {
+                    localStorage.removeItem('arsha_user');
+                    window.location.href = 'index.html';
                 }
-            });
-            window.addEventListener('endQuiz', () => {
-                const appContainer = document.getElementById('app-container');
-                appContainer.style.display = 'block';
-                setTimeout(() => { appContainer.style.opacity = '1'; }, 10);
-                zoomOut();
-            });
-
-            window.addEventListener('mousedown', onMouseDown);
-            window.addEventListener('mouseup', onMouseUp);
-            window.addEventListener('mousemove', onMouseMove);
+            }
         }
 
         init();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
         scene.background = new THREE.Color(0x000000);
     </script>
 
@@ -3392,6 +3644,11 @@
             document.getElementById('game-over-screen').style.display = 'none';
             document.getElementById('game-area').style.display = 'flex';
 
+            // Auto-start again
+            launchPracticeGameLoop();
+        }
+
+        function launchPracticeGameLoop() {
             setTimeout(() => {
                 if (handleGameResize) { handleGameResize(); }
 
@@ -3453,7 +3710,12 @@
                 asteroid.rotation.x += 0.01;
                 asteroid.rotation.y += 0.01;
 
-                if (asteroid.position.z > gameCamera.position.z - 2) {
+                // Check if asteroid is getting too close (sooner than before)
+                // Camera is at z=10. Asteroids start at -150.
+                // Check if asteroid is getting too close (sooner than before)
+                // Camera is at z=10. Asteroids start at -150.
+                // New check: > -100 (EXTREMELY SOON - almost immediately after spawn)
+                if (asteroid.position.z > -100) {
                     const missedAsteroid = asteroids.splice(i, 1)[0];
                     const missedWordData = missedAsteroid.userData;
                     const wordList = practiceGameVocab[currentLanguage] || practiceGameVocab['es'];
@@ -3480,7 +3742,7 @@
             const word = foreignWords[Math.floor(Math.random() * foreignWords.length)];
             const speed = Math.random() * 0.05 + 0.05;
 
-            const geometry = new THREE.IcosahedronGeometry(Math.random() * 2 + 1.0, 0);
+            const geometry = new THREE.IcosahedronGeometry(Math.random() * 8 + 8.0, 0); // MASSIVE size increase
             const material = new THREE.MeshStandardMaterial({
                 color: `hsl(${Math.random() * 360}, 80%, 60%)`,
                 flatShading: true,
@@ -3492,6 +3754,11 @@
             const textDiv = document.createElement('div');
             textDiv.className = 'asteroid-label';
             textDiv.textContent = word;
+            // Force smaller font size and styling inline to guarantee it renders small
+            textDiv.style.fontSize = '16px';
+            textDiv.style.fontWeight = 'bold';
+            textDiv.style.textShadow = '0 0 3px black';
+            textDiv.style.color = 'white';
             textDiv.style.opacity = 0;
             const label = new THREE.CSS2DObject(textDiv);
             label.position.set(0, 0, 0);
@@ -3556,6 +3823,10 @@
 
             input.style.transition = 'none';
             input.style.backgroundColor = correct ? 'rgba(40, 167, 69, 0.5)' : 'rgba(220, 53, 69, 0.5)';
+            if (!correct) {
+                input.classList.add('shake');
+                setTimeout(() => input.classList.remove('shake'), 500);
+            }
             setTimeout(() => {
                 input.style.transition = 'background-color 0.5s';
                 input.style.backgroundColor = 'rgba(0,0,0,0.5)';
